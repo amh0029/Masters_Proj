@@ -5,7 +5,10 @@
  */
 package Masters_Proj;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 /**
@@ -41,7 +44,7 @@ public class DecodeFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        stackedTextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         storageDirectoryTextField = new javax.swing.JTextField();
         browseButton3 = new javax.swing.JButton();
@@ -142,7 +145,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1))
+                                .addComponent(stackedTextField))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -160,7 +163,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(stackedTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -232,11 +235,13 @@ public class DecodeFrame extends javax.swing.JFrame {
             File imageFile = imageChooser.getSelectedFile();
             if(evt.getSource() == browseButton1)
             {
-                encodedTextField1.setText(imageFile.getName());
+                encodedTextField1.setText(imageFile.getAbsolutePath());
+                shareFiles[0] = imageFile.getAbsolutePath();
             }
             else if(evt.getSource() == browseButton2)
             {
-                encodedTextField2.setText(imageFile.getName());
+                encodedTextField2.setText(imageFile.getAbsolutePath());
+                shareFiles[1] = imageFile.getAbsolutePath();
             }
         }
     }//GEN-LAST:event_imageBrowsePressed
@@ -249,13 +254,80 @@ public class DecodeFrame extends javax.swing.JFrame {
             File dir = directoryChooser.getSelectedFile();
             if(evt.getSource() == browseButton3)
             {
-                storageDirectoryTextField.setText(dir.getName());
+                storageDirectoryTextField.setText(dir.getAbsolutePath());
+                directoryForStorage = dir.getAbsolutePath();
             }
         }
     }//GEN-LAST:event_directoryBrowsePressed
 
     private void decodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodePressed
         // TODO add your handling code here:
+        BufferedImage[] sharesEVCS = new BufferedImage[2];
+        boolean fileFound = false;
+        
+        for(int i = 0; i < 2; i++)
+        {
+            try
+            {
+                sharesEVCS[i] = ImageIO.read(new File(shareFiles[i]));
+                fileFound = true;
+            }
+            catch(IOException e)
+            {
+                //Add alert
+                fileFound = false;
+            }
+        }
+        
+        if(fileFound)
+        {
+            ExtendedVCS myEVCS = new ExtendedVCS(sharesEVCS);
+            myEVCS.decryptImage();
+            
+            String decodedFileName;
+            
+            if(stackedTextField.getText().equals(""))
+            {
+                //Get path to users desktop
+                //BUG!!!  Not working.
+                decodedFileName = directoryForStorage + "/secretMsg.png";
+                //makeDir = false;
+            }
+            else
+            {
+                decodedFileName = directoryForStorage + "/" + stackedTextField.getText() + ".png";
+            }
+            
+            //boolean makeDir = true;
+            if(storageDirectoryTextField.getText().equals(""))
+            {
+                //Get path to users desktop
+                //BUG!!!  Not working.
+                directoryForStorage = "C:/Users/allisonholt/Desktop";
+                //makeDir = false;
+            }
+            
+            //if(makeDir)
+            //{
+                //File directory = new File(directoryForStorage);
+            //}
+            
+            String[] shareFiles = new String[2];
+            
+            try
+            {
+                BufferedImage decryptImage = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
+                decryptImage.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), myEVCS.getDecryptImgPixels(), 0, myEVCS.getImgWidth());
+                
+                File tempOutput = new File(decodedFileName);
+                ImageIO.write(decryptImage, "png", tempOutput);
+            }
+            catch(IOException e)
+            {
+                //Add alert
+            }
+             
+        }
     }//GEN-LAST:event_decodePressed
 
     /**
@@ -292,7 +364,10 @@ public class DecodeFrame extends javax.swing.JFrame {
             }
         });
     }
-
+    //Variables for decoding
+    private String[] shareFiles = new String[2];
+    private String directoryForStorage = "";
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton1;
     private javax.swing.JButton browseButton2;
@@ -309,7 +384,7 @@ public class DecodeFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField stackedTextField;
     private javax.swing.JTextField storageDirectoryTextField;
     // End of variables declaration//GEN-END:variables
 }

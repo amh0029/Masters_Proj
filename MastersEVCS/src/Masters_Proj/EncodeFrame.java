@@ -1,6 +1,9 @@
 package Masters_Proj;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 /*
@@ -295,6 +298,7 @@ public class EncodeFrame extends javax.swing.JFrame {
             if(evt.getSource() == browseButton4)
             {
                 storageDirectoryTextField.setText(dir.getName());
+                directoryForStorage = dir.getAbsolutePath();
             }
         }
         
@@ -310,22 +314,112 @@ public class EncodeFrame extends javax.swing.JFrame {
             if(evt.getSource() == browseButton1)
             {
                 secretTextField.setText(imageFile.getName());
+                secretFile = imageFile.getAbsolutePath();
             }
             else if(evt.getSource() == browseButton2)
             {
                 innocentTextField1.setText(imageFile.getName());
+                innocentFiles[0] = imageFile.getAbsolutePath();
             }
             else if(evt.getSource() == browseButton3)
             {
                 innocentTextField2.setText(imageFile.getName());
+                innocentFiles[1] = imageFile.getAbsolutePath();
             }
         }
     }//GEN-LAST:event_imageBrowsePressed
 
     private void encodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodePressed
-        // TODO add your handling code here:
+        //Code to encode secret message
+        BufferedImage secretImage = null;
+        boolean fileFound;
+        try
+        {
+            secretImage = ImageIO.read(new File(secretFile));
+            fileFound = true;
+        }
+        catch (IOException e)
+        {
+            //Set up and alert window
+            fileFound = false;
+        }
         
-        //put encoding material here
+        BufferedImage[] innocentShares = new BufferedImage[0];
+        if(fileFound)
+        {
+            innocentShares = new BufferedImage[2];
+            for(int i = 0; i < 2; i++)
+            {
+                try
+                {
+                   innocentShares[i] = ImageIO.read(new File(innocentFiles[i]));
+                   fileFound = true;
+                }
+                catch(IOException e)
+                {
+                    //Set up alert window
+                    fileFound = false;
+                }
+            }
+        }
+        
+        if(fileFound)
+        {
+            ExtendedVCS myEVCS = new ExtendedVCS(secretImage, innocentShares);
+            myEVCS.encryptImage();
+            
+            int[][] newInnocentRGB = myEVCS.getRGBPixelsForShares();
+            
+            //boolean makeDir = true;
+            if(storageDirectoryTextField.getText().equals(""))
+            {
+                //Get path to users desktop
+                //BUG!!!  Not working.
+                directoryForStorage = "C:/Users/allisonholt/Desktop";
+                //makeDir = false;
+            }
+            
+            //if(makeDir)
+            //{
+                //File directory = new File(directoryForStorage);
+            //}
+            
+            String[] shareFiles = new String[2];
+            
+            if(filename1.getText().equals(""))
+            {
+                shareFiles[0] = directoryForStorage + "/share1.png";
+            }
+            else
+            {
+                shareFiles[0] = directoryForStorage + "/" + filename1.getText() +".png";
+            }
+                
+            if(filename2.getText().equals(""))
+            {
+                shareFiles[1] = directoryForStorage + "/share2.png";
+            }
+            else
+            {
+                shareFiles[1] = directoryForStorage + "/" + filename2.getText() +".png";
+            }
+            
+            for(int i = 0; i < 2; i++)
+            {
+                try
+                {
+                    BufferedImage tempShare = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
+                    tempShare.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), newInnocentRGB[i], 0, myEVCS.getImgWidth());
+                    File tempOutput = new File(shareFiles[i]);
+                    ImageIO.write(tempShare, "png", tempOutput);
+                }
+                catch (IOException e)
+                {
+                    //Print alert here
+                }
+            }
+            
+        }
     }//GEN-LAST:event_encodePressed
 
     /**
@@ -363,6 +457,11 @@ public class EncodeFrame extends javax.swing.JFrame {
         });
     }
 
+    //Variables for encoding
+    private String secretFile = "";
+    private String[] innocentFiles = new String[2];
+    private String directoryForStorage = "";
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseButton1;
     private javax.swing.JButton browseButton2;
