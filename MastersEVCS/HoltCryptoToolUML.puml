@@ -1,0 +1,48 @@
+@startuml
+annotation java.lang.Override
+annotation java.lang.SuppressWarnings
+class Masters_Proj.DecodeFrame
+class Masters_Proj.DirectoryCustomFilter
+class Masters_Proj.EncodeFrame
+class Masters_Proj.ExtendedVCS
+class Masters_Proj.ImageCustomFilter
+class Masters_Proj.MainFrame
+class Masters_Proj.Pixel
+class java.awt.Color
+class java.awt.image.BufferedImage
+class java.io.File
+class java.io.IOException
+class java.util.Arrays
+class java.util.Random
+class javax.imageio.ImageIO
+class javax.swing.JFileChooser
+class javax.swing.JFrame
+class javax.swing.filechooser.FileFilter
+Masters_Proj.DecodeFrame ..> java.lang.SuppressWarnings
+Masters_Proj.DecodeFrame ..> java.awt.image.BufferedImage
+Masters_Proj.DecodeFrame ..> java.io.File
+Masters_Proj.DecodeFrame ..> java.io.IOException
+Masters_Proj.DecodeFrame ..> javax.imageio.ImageIO
+Masters_Proj.DecodeFrame ..> javax.swing.JFileChooser
+Masters_Proj.DecodeFrame --|> javax.swing.JFrame
+Masters_Proj.DirectoryCustomFilter ..> java.lang.Override
+Masters_Proj.DirectoryCustomFilter ..> java.io.File
+Masters_Proj.DirectoryCustomFilter --|> javax.swing.filechooser.FileFilter
+Masters_Proj.EncodeFrame ..> java.lang.SuppressWarnings
+Masters_Proj.EncodeFrame ..> java.awt.image.BufferedImage
+Masters_Proj.EncodeFrame ..> java.io.File
+Masters_Proj.EncodeFrame ..> java.io.IOException
+Masters_Proj.EncodeFrame ..> javax.imageio.ImageIO
+Masters_Proj.EncodeFrame ..> javax.swing.JFileChooser
+Masters_Proj.EncodeFrame --|> javax.swing.JFrame
+Masters_Proj.ExtendedVCS ..> java.awt.Color
+Masters_Proj.ExtendedVCS ..> java.awt.image.BufferedImage
+Masters_Proj.ExtendedVCS ..> java.util.Arrays
+Masters_Proj.ExtendedVCS ..> java.util.Random
+Masters_Proj.ImageCustomFilter ..> java.lang.Override
+Masters_Proj.ImageCustomFilter ..> java.io.File
+Masters_Proj.ImageCustomFilter --|> javax.swing.filechooser.FileFilter
+Masters_Proj.MainFrame ..> java.lang.SuppressWarnings
+Masters_Proj.MainFrame --|> javax.swing.JFrame
+Masters_Proj.Pixel ..> java.awt.Color
+@enduml
