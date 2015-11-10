@@ -25,11 +25,9 @@ public class Pixel
    }
    
    //Used to determine if pixel is closer to white than black
-   public boolean isMoreWhiteThanBlack()
+   public int getConcentration()
    {
-      int sum = redVal + greenVal + blueVal;
-      int avg = sum / 3;
-      return (avg >= 128);
+      return redVal;
    }
     
 }

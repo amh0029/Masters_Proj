@@ -24,36 +24,11 @@ public class ExtendedVCS
    private BufferedImage[] innocentShares;
    //private int[2][] shareOrigRGBPixels;
    private int[][] encryptedShareRGB;
+   private int[][] secretSharesRGB;
    
    private int numSharesToDecrypt;
    private BufferedImage[] sharesToDecrypt;
    private int[] secretMsgPixels;
-   
-   //Matrices
-   int[][] wwSw = new int[][]{
-                    {1, 0, 0, 1},
-                     {1, 0, 0, 0} };
-   int[][] wwSb = new int[][]{
-                    {1, 0, 0, 1},
-                     {0, 1, 1, 0} };
-   int[][] wbSw = new int [][]{
-                    {1, 0, 0, 1},
-                     {1, 0, 1, 1} };
-   int[][] wbSb = new int [][]{
-                    {1, 0, 0, 1},
-                     {0, 1, 1, 1} };
-   int[][] bwSw = new int [][]{
-                    {1, 0, 1, 1},
-                     {1, 0, 1, 0} };
-   int[][] bwSb = new int [][]{
-                    {1, 0, 1, 1},
-                     {0, 1, 1, 0} };
-   int[][] bbSw = new int [][]{
-                    {1, 0, 1, 1},
-                     {1, 0, 1, 1} };
-   int[][] bbSb = new int [][]{
-                    {1, 0, 1, 1},
-                     {0, 1, 1, 1} };
    
    
    //For encryption purposes
@@ -106,9 +81,18 @@ public class ExtendedVCS
       createPixelsOfShares(secretRGB, shareOrigRGB);
    }
    
+   /**
+    * 
+    * @param secretImgRGB The RGB values of the secret image
+    * @param shareOriginalRGB The RGB values of the innocent images
+    */
    void createPixelsOfShares(int[] secretImgRGB, int[][] shareOriginalRGB)
    {
-      encryptedShareRGB = new int[2][imgWidth * imgHeight];
+      //Used to store the embedded RGB values
+       encryptedShareRGB = new int[2][imgWidth * imgHeight];
+       
+       //Used to bring the secret image up using a size invarint-ish technique
+       secretSharesRGB = new int[2][imgWidth * imgHeight];
       
       for(int i = 0; i < secretImgRGB.length; i++)
       {
@@ -128,131 +112,29 @@ public class ExtendedVCS
          Pixel innocent1 = new Pixel(redVal, greenVal, blueVal);
          
          Random randomGen = new Random();
-         int randomColumn = randomGen.nextInt(4);
-                     
-         //If pixel is white
-         if(innocent0.isMoreWhiteThanBlack())
-         {            
-            if(innocent1.isMoreWhiteThanBlack())
-            {
-               if(orig.isMoreWhiteThanBlack())
-               {
-                  //Want to use matrix wwSw
-                  if(wwSw[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(wwSw[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-               else
-               {
-                  //Want to use matrix wwSb
-                  if(wwSb[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(wwSb[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-            }
-            else
-            {
-               if(orig.isMoreWhiteThanBlack())
-               {
-                  //Want to use matrix wbSw
-                  if(wbSw[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(wbSw[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-               else
-               {
-                  //Want to use matrix wbSb
-                  if(wbSb[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(wbSb[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-            }
-         }
-         else
-         {
-            if(innocent1.isMoreWhiteThanBlack())
-            {
-               if(orig.isMoreWhiteThanBlack())
-               {
-                  //Want to use matrix bwSw
-                  if(bwSw[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(bwSw[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-               else
-               {
-                  //Want to use matrix bwSb
-                  if(bwSb[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(bwSb[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-            }
-            else
-            {
-               if(orig.isMoreWhiteThanBlack())
-               {
-                  //Want to use matrix bbSw
-                  if(bbSw[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(bbSw[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-               else
-               {
-                  //Want to use matrix bbSb
-                  if(bbSb[0][randomColumn] == 0)
-                     encryptedShareRGB[0][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[0][i] = Color.BLACK.getRGB();
-                     
-                  if(bbSb[1][randomColumn] == 0)
-                     encryptedShareRGB[1][i] = Color.WHITE.getRGB();
-                  else
-                     encryptedShareRGB[1][i] = Color.BLACK.getRGB();
-               }
-            }
-         }
+         int maxGrayCon = orig.getConcentration();
+         int grayCon1 = randomGen.nextInt(maxGrayCon + 1);
+         int grayCon2 = maxGrayCon - grayCon1;
+         
+         Color secretGray1 = new Color(grayCon1, grayCon1, grayCon1);
+         secretSharesRGB[0][i] = secretGray1.getRGB();
+         
+         Color secretGray2 = new Color(grayCon2, grayCon2, grayCon2);
+         secretSharesRGB[1][i] = secretGray2.getRGB();
+         
+         int innocent1Con = innocent0.getConcentration();
+         int embedded1Con = innocent1Con + grayCon1;
+         if(embedded1Con > 255)
+             embedded1Con = 255;
+         Color embedded1 = new Color(embedded1Con, embedded1Con, embedded1Con);
+         encryptedShareRGB[0][i] = embedded1.getRGB();
+         
+         int innocent2Con = innocent1.getConcentration();
+         int embedded2Con = innocent2Con + grayCon2;
+         if(embedded2Con > 255)
+             embedded2Con = 255;
+         Color embedded2 = new Color(embedded2Con, embedded2Con, embedded2Con);
+         encryptedShareRGB[1][i] = embedded2.getRGB();
       }
    }
    
