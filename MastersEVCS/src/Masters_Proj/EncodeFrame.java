@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -287,9 +288,6 @@ public class EncodeFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelPressed
 
     private void dirBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dirBrowsePressed
-        // TODO add your handling code here:
-        //Add code to handle file broswer
-        //new ImageFileChooser().setVisible(true);
         
         int returnVal = directoryChooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -305,7 +303,6 @@ public class EncodeFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_dirBrowsePressed
 
     private void imageBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowsePressed
-        // TODO add your handling code here:
         
         int returnVal = imageChooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -340,7 +337,8 @@ public class EncodeFrame extends javax.swing.JFrame {
         }
         catch (IOException e)
         {
-            //Set up and alert window
+            JOptionPane.showMessageDialog(null, "Error reading your secret file",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
             fileFound = false;
         }
         
@@ -357,7 +355,9 @@ public class EncodeFrame extends javax.swing.JFrame {
                 }
                 catch(IOException e)
                 {
-                    //Set up alert window
+                    JOptionPane.showMessageDialog(null, 
+                        ("Error reading innocent file " + (i + 1)),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
                     fileFound = false;
                 }
             }
@@ -370,7 +370,6 @@ public class EncodeFrame extends javax.swing.JFrame {
             
             int[][] newInnocentRGB = myEVCS.getRGBPixelsForShares();
             
-            //boolean makeDir = true;
             if(storageDirectoryTextField.getText().equals(""))
             {
                 //Get path to users desktop
@@ -399,23 +398,28 @@ public class EncodeFrame extends javax.swing.JFrame {
                 shareFiles[1] = directoryForStorage + "/" + filename2.getText() +".png";
             }
             
-            for(int i = 0; i < 2; i++)
+            
+            try
             {
-                try
-                {
-                    BufferedImage tempShare = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
-                    tempShare.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), newInnocentRGB[i], 0, myEVCS.getImgWidth());
-                    File tempOutput = new File(shareFiles[i]);
-                    ImageIO.write(tempShare, "png", tempOutput);
+                BufferedImage tempShare1 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
+                tempShare1.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), newInnocentRGB[0], 0, myEVCS.getImgWidth());
+                File tempOutput1 = new File(shareFiles[0]);
+                ImageIO.write(tempShare1, "png", tempOutput1);
                     
-                    new MainFrame().setVisible(true);
-                    //ADD SUCCESS ALERT
-                    this.setVisible(false);
-                }
-                catch (IOException e)
-                {
-                    //Print alert here
-                }
+                BufferedImage tempShare2 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
+                tempShare2.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), newInnocentRGB[1], 0, myEVCS.getImgWidth());
+                File tempOutput2 = new File(shareFiles[1]);
+                ImageIO.write(tempShare2, "png", tempOutput2);
+                    
+                new MainFrame().setVisible(true);
+                this.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Your encrypted shares have been created.",
+                    "SUCCESS", JOptionPane.PLAIN_MESSAGE);
+            }
+            catch (IOException e)
+            {
+                JOptionPane.showMessageDialog(null, "Error encrypting your secret message",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
             }
             
         }

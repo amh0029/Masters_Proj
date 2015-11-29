@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -274,7 +275,9 @@ public class DecodeFrame extends javax.swing.JFrame {
             }
             catch(IOException e)
             {
-                //Add alert
+                JOptionPane.showMessageDialog(null, 
+                    ("Error reading file share" + (i + 1)),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
                 fileFound = false;
             }
         }
@@ -284,8 +287,15 @@ public class DecodeFrame extends javax.swing.JFrame {
             ExtendedVCS myEVCS = new ExtendedVCS(sharesEVCS);
             myEVCS.decryptImage();
             
-            String decodedFileName;
+            if(storageDirectoryTextField.getText().equals(""))
+            {
+                //Get path to users desktop
+                //BUG!!!  Not working.
+                directoryForStorage = "C:/Users/allisonholt/Desktop";
+                //makeDir = false;
+            }
             
+            String decodedFileName;
             if(stackedTextField.getText().equals(""))
             {
                 //Get path to users desktop
@@ -298,17 +308,6 @@ public class DecodeFrame extends javax.swing.JFrame {
                 decodedFileName = directoryForStorage + "/" + stackedTextField.getText() + ".png";
             }
             
-            //boolean makeDir = true;
-            if(storageDirectoryTextField.getText().equals(""))
-            {
-                //Get path to users desktop
-                //BUG!!!  Not working.
-                directoryForStorage = "C:/Users/allisonholt/Desktop";
-                //makeDir = false;
-            }
-            
-            String[] shareFiles = new String[2];
-            
             try
             {
                 BufferedImage decryptImage = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -318,12 +317,14 @@ public class DecodeFrame extends javax.swing.JFrame {
                 ImageIO.write(decryptImage, "png", tempOutput);
                 
                 new MainFrame().setVisible(true);
-                //ADD SUCCESS ALERT
                 this.setVisible(false);
+                JOptionPane.showMessageDialog(null, "Your decrypted image has been created.",
+                    "SUCCESS", JOptionPane.PLAIN_MESSAGE);
             }
             catch(IOException e)
             {
-                //Add alert
+                JOptionPane.showMessageDialog(null, "Error decrypting your secret message",
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
             }
              
         }
