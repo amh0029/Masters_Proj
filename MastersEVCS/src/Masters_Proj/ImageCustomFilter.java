@@ -18,13 +18,14 @@ public class ImageCustomFilter extends javax.swing.filechooser.FileFilter {
     {
         //allow only image file
         return file.isDirectory() || file.getAbsolutePath().endsWith(".png")
-                || file.getAbsolutePath().endsWith(".jpeg");
+                || file.getAbsolutePath().endsWith(".jpeg")
+                || file.getAbsolutePath().endsWith(".jpg");
     }
     
     @Override
     public String getDescription()
     {
-        return "Image files (*.png, *.jpeg)";
+        return "Image files (*.png, *.jpeg, *.jpg)";
     }
     
 }

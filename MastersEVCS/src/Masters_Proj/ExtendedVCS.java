@@ -141,41 +141,37 @@ public class ExtendedVCS
    void decryptImage()
    {
       //Make a 2d array of pixel arrays
-      int[][] pixelsToCompare = new int[numSharesToDecrypt][imgWidth * imgHeight];
+      int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
       secretMsgPixels = new int[imgWidth * imgHeight];
                   
       //getRGB pixels of BufferedImages
       for(int i = 0; i < numSharesToDecrypt; i++)
       {
-         sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, pixelsToCompare[i], 0, imgWidth);
+         sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, embeddedPixels[i], 0, imgWidth);
       }
                   
       //Logical OR pixel with all three share values
-      int numOfPixels = pixelsToCompare[0].length;
+      int numOfPixels = embeddedPixels[0].length;
       for(int i = 0; i < numOfPixels; i++)
       {
-         int pixelColor = 0;
-         for(int j = 0; j < numSharesToDecrypt; j++)
-         {
-            if(pixelsToCompare[j][i] == Color.WHITE.getRGB())
-            {
-               pixelColor = pixelColor | 0;
-            }
-            else
-            {
-               pixelColor = pixelColor | 1;
-            }
-         }
-                     
-         //Store the result in an array after converting to WHITE and BLACK
-         if(pixelColor == 1)
-         {
-            secretMsgPixels[i] = Color.BLACK.getRGB();
-         }
-         else
-         {
-            secretMsgPixels[i] = Color.WHITE.getRGB();
-         }
+         int redVal = (embeddedPixels[0][i] & 0x00ff0000) >> 16;
+         int greenVal = (embeddedPixels[0][i] & 0x0000ff00) >> 8;
+         int blueVal = (embeddedPixels[0][i] & 0x000000ff);
+         Pixel embedded1 = new Pixel(redVal, greenVal, blueVal);
+         int share1Con = embedded1.getConcentration();
+         
+         redVal = (embeddedPixels[1][i] & 0x00ff0000) >> 16;
+         greenVal = (embeddedPixels[1][i] & 0x0000ff00) >> 8;
+         blueVal = (embeddedPixels[1][i] & 0x000000ff);
+         Pixel embedded2 = new Pixel(redVal, greenVal, blueVal);
+         int share2Con = embedded2.getConcentration();
+         
+         int totalCon = share1Con + share2Con;
+         if(totalCon > 255)
+             totalCon = 255;
+         
+         Color decryptedColor = new Color(totalCon, totalCon, totalCon);
+         secretMsgPixels[i] = decryptedColor.getRGB();
       }
    }
 

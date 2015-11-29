@@ -297,7 +297,7 @@ public class EncodeFrame extends javax.swing.JFrame {
             File dir = directoryChooser.getSelectedFile();
             if(evt.getSource() == browseButton4)
             {
-                storageDirectoryTextField.setText(dir.getName());
+                storageDirectoryTextField.setText(dir.getAbsolutePath());
                 directoryForStorage = dir.getAbsolutePath();
             }
         }
@@ -313,17 +313,17 @@ public class EncodeFrame extends javax.swing.JFrame {
             File imageFile = imageChooser.getSelectedFile();
             if(evt.getSource() == browseButton1)
             {
-                secretTextField.setText(imageFile.getName());
+                secretTextField.setText(imageFile.getAbsolutePath());
                 secretFile = imageFile.getAbsolutePath();
             }
             else if(evt.getSource() == browseButton2)
             {
-                innocentTextField1.setText(imageFile.getName());
+                innocentTextField1.setText(imageFile.getAbsolutePath());
                 innocentFiles[0] = imageFile.getAbsolutePath();
             }
             else if(evt.getSource() == browseButton3)
             {
-                innocentTextField2.setText(imageFile.getName());
+                innocentTextField2.setText(imageFile.getAbsolutePath());
                 innocentFiles[1] = imageFile.getAbsolutePath();
             }
         }
@@ -379,11 +379,6 @@ public class EncodeFrame extends javax.swing.JFrame {
                 //makeDir = false;
             }
             
-            //if(makeDir)
-            //{
-                //File directory = new File(directoryForStorage);
-            //}
-            
             String[] shareFiles = new String[2];
             
             if(filename1.getText().equals(""))
@@ -412,6 +407,10 @@ public class EncodeFrame extends javax.swing.JFrame {
                     tempShare.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), newInnocentRGB[i], 0, myEVCS.getImgWidth());
                     File tempOutput = new File(shareFiles[i]);
                     ImageIO.write(tempShare, "png", tempOutput);
+                    
+                    new MainFrame().setVisible(true);
+                    //ADD SUCCESS ALERT
+                    this.setVisible(false);
                 }
                 catch (IOException e)
                 {

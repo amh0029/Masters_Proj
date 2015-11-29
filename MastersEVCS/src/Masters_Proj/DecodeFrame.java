@@ -307,11 +307,6 @@ public class DecodeFrame extends javax.swing.JFrame {
                 //makeDir = false;
             }
             
-            //if(makeDir)
-            //{
-                //File directory = new File(directoryForStorage);
-            //}
-            
             String[] shareFiles = new String[2];
             
             try
@@ -321,6 +316,10 @@ public class DecodeFrame extends javax.swing.JFrame {
                 
                 File tempOutput = new File(decodedFileName);
                 ImageIO.write(decryptImage, "png", tempOutput);
+                
+                new MainFrame().setVisible(true);
+                //ADD SUCCESS ALERT
+                this.setVisible(false);
             }
             catch(IOException e)
             {
