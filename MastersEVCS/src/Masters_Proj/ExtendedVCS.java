@@ -123,16 +123,16 @@ public class ExtendedVCS
          secretSharesRGB[1][i] = secretGray2.getRGB();
          
          int innocent1Con = innocent0.getConcentration();
-         int embedded1Con = innocent1Con + grayCon1;
-         if(embedded1Con > 255)
-             embedded1Con = 255;
+         int embedded1Con = (innocent1Con + grayCon1) / 2;
+         if(embedded1Con < 0)
+             embedded1Con = 0;
          Color embedded1 = new Color(embedded1Con, embedded1Con, embedded1Con);
          encryptedShareRGB[0][i] = embedded1.getRGB();
          
          int innocent2Con = innocent1.getConcentration();
-         int embedded2Con = innocent2Con + grayCon2;
-         if(embedded2Con > 255)
-             embedded2Con = 255;
+         int embedded2Con = (innocent2Con + grayCon2) / 2;
+         if(embedded2Con < 0)
+             embedded2Con = 0;
          Color embedded2 = new Color(embedded2Con, embedded2Con, embedded2Con);
          encryptedShareRGB[1][i] = embedded2.getRGB();
       }
@@ -166,9 +166,9 @@ public class ExtendedVCS
          Pixel embedded2 = new Pixel(redVal, greenVal, blueVal);
          int share2Con = embedded2.getConcentration();
          
-         int totalCon = share1Con + share2Con;
-         if(totalCon > 255)
-             totalCon = 255;
+         int totalCon = 255 - (share1Con + share2Con);
+         if(totalCon < 0)
+             totalCon = 0;
          
          Color decryptedColor = new Color(totalCon, totalCon, totalCon);
          secretMsgPixels[i] = decryptedColor.getRGB();
