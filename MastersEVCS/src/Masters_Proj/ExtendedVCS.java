@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class ExtendedVCS 
 {
-    private int k;
+   private int k;
    private int n;
    private int imgWidth;
    private int imgHeight;
@@ -149,28 +149,26 @@ public class ExtendedVCS
       {
          sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, embeddedPixels[i], 0, imgWidth);
       }
-                  
-      //Logical OR pixel with all three share values
+                 
       int numOfPixels = embeddedPixels[0].length;
       for(int i = 0; i < numOfPixels; i++)
       {
-         int redVal = (embeddedPixels[0][i] & 0x00ff0000) >> 16;
-         int greenVal = (embeddedPixels[0][i] & 0x0000ff00) >> 8;
-         int blueVal = (embeddedPixels[0][i] & 0x000000ff);
-         Pixel embedded1 = new Pixel(redVal, greenVal, blueVal);
-         int share1Con = embedded1.getConcentration();
          
-         redVal = (embeddedPixels[1][i] & 0x00ff0000) >> 16;
-         greenVal = (embeddedPixels[1][i] & 0x0000ff00) >> 8;
-         blueVal = (embeddedPixels[1][i] & 0x000000ff);
-         Pixel embedded2 = new Pixel(redVal, greenVal, blueVal);
-         int share2Con = embedded2.getConcentration();
+         int redVal1 = (embeddedPixels[0][i] & 0x00ff0000) >> 16;
+         int greenVal1 = (embeddedPixels[0][i] & 0x0000ff00) >> 8;
+         int blueVal1 = (embeddedPixels[0][i] & 0x000000ff);
          
-         int totalCon = 255 - (share1Con + share2Con);
-         if(totalCon < 0)
-             totalCon = 0;
+         int redVal2 = (embeddedPixels[1][i] & 0x00ff0000) >> 16;
+         int greenVal2 = (embeddedPixels[1][i] & 0x0000ff00) >> 8;
+         int blueVal2 = (embeddedPixels[1][i] & 0x000000ff);
          
-         Color decryptedColor = new Color(totalCon, totalCon, totalCon);
+         //Need to XOR the color concentrations
+         //XORing mimics stacking transparencies
+         int redVal = (int)(redVal1 ^ redVal2);
+         int greenVal = (int)(greenVal1 ^ greenVal2);
+         int blueVal = (int)(blueVal1 ^ blueVal2);
+         
+         Color decryptedColor = new Color(redVal, greenVal, blueVal);
          secretMsgPixels[i] = decryptedColor.getRGB();
       }
    }
