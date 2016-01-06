@@ -25,9 +25,14 @@ public class Pixel
    }
    
    //Used to determine if pixel is closer to white than black
-   public int getConcentration()
+   public int getConcentration(char color)
    {
-      return redVal;
+      if(color == 'r')
+          return redVal;
+      else if(color == 'g')
+          return greenVal;
+      else
+          return blueVal;
    }
     
 }

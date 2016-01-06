@@ -74,11 +74,68 @@ public class ExtendedVCS
    void encryptImage()
    {
       int[] secretRGB = new int[imgWidth * imgHeight];
-      int[][] shareOrigRGB = new int[2][imgWidth * imgHeight];
+      //A cover image is the same as an innocent image
+      int[][] coverRGB = new int[2][imgWidth * imgHeight];
+      
+      //Process the gathered innocent images and the secret image
       secretMsg.getRGB(0, 0, imgWidth, imgHeight, secretRGB, 0, imgWidth);
-      innocentShares[0].getRGB(0, 0, imgWidth, imgHeight, shareOrigRGB[0], 0, imgWidth);
-      innocentShares[1].getRGB(0, 0, imgWidth, imgHeight, shareOrigRGB[1], 0, imgWidth);
-      createPixelsOfShares(secretRGB, shareOrigRGB);
+      innocentShares[0].getRGB(0, 0, imgWidth, imgHeight, coverRGB[0], 0, imgWidth);
+      innocentShares[1].getRGB(0, 0, imgWidth, imgHeight, coverRGB[1], 0, imgWidth);
+      
+      //Half-tone Innocent Images
+      errorDiffusion(coverRGB[0]);
+      errorDiffusion(coverRGB[1]);
+      
+      //Split secret image into three images
+      int[] secretRed = new int[secretRGB.length];
+      int[] secretGreen = new int[secretRGB.length];
+      int[] secretBlue = new int[secretRGB.length];
+      splitSecretRGB(secretRGB, secretRed, secretGreen, secretBlue);
+      
+      //VIP synchronization
+      vipSynchronization(secretRed, secretGreen, secretBlue, coverRGB);
+      
+      //Perform error diffusion on cover images with secret encoded
+      errorDiffusion(encryptedShareRGB[0]);
+      errorDiffusion(encryptedShareRGB[1]);
+      
+      //OLD WAY:  createPixelsOfShares(secretRGB, coverRGB);
+   }
+   
+   void errorDiffusion(int[] image)
+   {
+       
+   }
+   
+   void splitSecretRGB(int[] secret, int[] red, int[] green, int[] blue)
+   {
+       for(int i = 0; i < secret.length; i++)
+       {
+         int redVal = (secret[i] & 0x00ff0000) >> 16;
+         int greenVal = (secret[i] & 0x0000ff00) >> 8;
+         int blueVal = (secret[i] & 0x000000ff);
+         
+         Pixel redPix = new Pixel(redVal, 0, 0);
+         Pixel greenPix = new Pixel(0, greenVal, 0);
+         Pixel bluePix = new Pixel (0, 0, blueVal);
+         
+         int redCon = redPix.getConcentration('r');
+         int greenCon = greenPix.getConcentration('g');
+         int blueCon = bluePix.getConcentration('b');
+         
+         Color redColor = new Color(redCon, 0, 0);
+         Color greenColor = new Color(0, greenCon, 0);
+         Color blueColor = new Color(0, 0, blueCon);
+         
+         red[i] = redColor.getRGB();
+         green[i] = greenColor.getRGB();
+         blue[i] = blueColor.getRGB();
+       }
+   }
+   
+   void vipSynchronization(int[] red, int[] green, int[] blue, int[][] cover)
+   {
+       //place combo into encryptedShareRGB[][]
    }
    
    /**
@@ -112,7 +169,7 @@ public class ExtendedVCS
          Pixel innocent1 = new Pixel(redVal, greenVal, blueVal);
          
          Random randomGen = new Random();
-         int maxGrayCon = orig.getConcentration();
+         int maxGrayCon = orig.getConcentration('r');
          int grayCon1 = randomGen.nextInt(maxGrayCon + 1);
          int grayCon2 = maxGrayCon - grayCon1;
          
@@ -122,14 +179,14 @@ public class ExtendedVCS
          Color secretGray2 = new Color(grayCon2, grayCon2, grayCon2);
          secretSharesRGB[1][i] = secretGray2.getRGB();
          
-         int innocent1Con = innocent0.getConcentration();
+         int innocent1Con = innocent0.getConcentration('r');
          int embedded1Con = (innocent1Con + grayCon1) / 2;
          if(embedded1Con < 0)
              embedded1Con = 0;
          Color embedded1 = new Color(embedded1Con, embedded1Con, embedded1Con);
          encryptedShareRGB[0][i] = embedded1.getRGB();
          
-         int innocent2Con = innocent1.getConcentration();
+         int innocent2Con = innocent1.getConcentration('r');
          int embedded2Con = (innocent2Con + grayCon2) / 2;
          if(embedded2Con < 0)
              embedded2Con = 0;
