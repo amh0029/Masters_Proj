@@ -28,11 +28,11 @@ public class Pixel
    public int getConcentration(char color)
    {
       if(color == 'r')
-          return redVal;
+         return redVal;
       else if(color == 'g')
-          return greenVal;
+         return greenVal;
       else
-          return blueVal;
+         return blueVal;
    }
     
 }
