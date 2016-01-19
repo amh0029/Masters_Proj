@@ -99,12 +99,143 @@ public class ExtendedVCS
       errorDiffusion(encryptedShareRGB[0]);
       errorDiffusion(encryptedShareRGB[1]);
       
+      //TEMPORARY for testing diffusion
+      /*
+      encryptedShareRGB = new int[2][imgWidth * imgHeight];
+      for(int i = 0; i < 2; i++)
+      {
+          for(int j = 0; j < (imgWidth * imgHeight); j++)
+          {
+              encryptedShareRGB[i][j] = coverRGB[i][j];
+          }
+      }
+      */
+      
       //OLD WAY:  createPixelsOfShares(secretRGB, coverRGB);
    }
    
    void errorDiffusion(int[] image)
    {
+       int x[][] = new int[imgHeight][imgWidth];
+       int u[][] = new int [imgHeight][imgWidth];
        
+       int i = 0;
+       for(int n = 0; n < imgHeight; n++)
+       {
+           for(int m = 0; m < imgWidth; m++)
+           {
+               x[n][m] = image[i];
+               i += 1;
+           }
+       }
+       
+       for(int n = 0; n < imgHeight; n++)
+       {
+           for(int m = 0; m < imgWidth; m++)
+           {
+               u[n][m] += x[n][m];
+               
+               int xRed = (x[n][m] & 0x00ff0000) >> 16;
+               int xGreen = (x[n][m] & 0x0000ff00) >> 8;
+               int xBlue = (x[n][m] & 0x000000ff);
+               
+               int uRed = (u[n][m] & 0x00ff0000) >> 16;
+               int uGreen = (u[n][m] & 0x0000ff00) >> 8;
+               int uBlue = (u[n][m] & 0x000000ff);
+               
+               int quantErrorRed = uRed - xRed;
+               int quantErrorGreen = uGreen - xGreen;
+               int quantErrorBlue = uBlue - xBlue;
+               
+               if(xRed > 127)
+               {
+                   if((m + 1) < imgWidth)
+                   {
+                       int temp = quantErrorRed * 7 / 16;
+                       temp = temp << 16;
+                       u[n][m + 1] += temp;
+                   }
+                   if((m - 1) >= 0 && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorRed * 3 / 16;
+                       temp = temp << 16;
+                       u[n + 1][m - 1] += temp;
+                   }
+                   if((n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorRed * 5 / 16;
+                       temp = temp << 16;
+                       u[n + 1][m] += temp;
+                   }
+                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorRed * 1 / 16;
+                       temp = temp << 16;
+                       u[n + 1][m + 1] += temp;
+                   }
+               }
+               if(xGreen > 127)
+               {
+                   if((m + 1) < imgWidth)
+                   {
+                       int temp = quantErrorGreen * 7 / 16;
+                       temp = temp << 8;
+                       u[n][m + 1] += temp;
+                   }
+                   if((m - 1) >= 0 && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorGreen * 3 / 16;
+                       temp = temp << 8;
+                       u[n + 1][m - 1] += temp;
+                   }
+                   if((n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorGreen * 5 / 16;
+                       temp = temp << 8;
+                       u[n + 1][m] += temp;
+                   }
+                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorGreen * 1 / 16;
+                       temp = temp << 8;
+                       u[n + 1][m + 1] += temp;
+                   }
+               }
+               if(xBlue > 127)
+               {
+                   if((m + 1) < imgWidth)
+                   {
+                       int temp = quantErrorBlue * 7 / 16;
+                       u[n][m + 1] += temp;
+                   }
+                   if((m - 1) >= 0 && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorBlue * 3 / 16;
+                       u[n + 1][m - 1] += temp;
+                   }
+                   if((n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorBlue * 5 / 16;
+                       u[n + 1][m] += temp;
+                   }
+                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
+                   {
+                       int temp = quantErrorBlue * 1 / 16;
+                       u[n + 1][m + 1] += temp;
+                   }
+               }
+           }
+       }
+       
+       int j = 0;
+       for(int n = 0; n < imgHeight; n++)
+       {
+           for(int m = 0; m < imgWidth; m++)
+           {
+               image[j] = u[n][m];
+               j += 1;
+           }
+       }
    }
    
    void splitSecretRGB(int[] secret, int[] red, int[] green, int[] blue)
