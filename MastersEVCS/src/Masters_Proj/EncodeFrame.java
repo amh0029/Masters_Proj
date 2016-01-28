@@ -24,6 +24,7 @@ public class EncodeFrame extends javax.swing.JFrame {
      */
     public EncodeFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
     
     public EncodeFrame(EncodeFrame prevState)

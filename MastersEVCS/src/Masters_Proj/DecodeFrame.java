@@ -23,6 +23,7 @@ public class DecodeFrame extends javax.swing.JFrame {
      */
     public DecodeFrame() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
