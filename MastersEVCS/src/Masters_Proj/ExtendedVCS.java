@@ -259,60 +259,9 @@ public class ExtendedVCS
            int c1Red = (cover[0][i] & 0x00ff0000) >> 16;
            int c2Red = (cover[1][i] & 0x00ff0000) >> 16;
            int secretRed = (red[i] & 0x00ff0000) >> 16;
-           String c1RedBinary = Integer.toBinaryString(c1Red);
-           if(c1RedBinary.length() < 8)
-           {
-               int numZeros = 8 - c1RedBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c1temp = c1RedBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c1temp[x];
-                   x += 1;
-               }
-               c1RedBinary = new String(temp);
-           }
-           String c2RedBinary = Integer.toBinaryString(c2Red);
-           if(c2RedBinary.length() < 8)
-           {
-               int numZeros = 8 - c2RedBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c2temp = c2RedBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c2temp[x];
-                   x += 1;
-               }
-               c2RedBinary = new String(temp);
-           }
-           String secretRedBinary = Integer.toBinaryString(secretRed);
-           if(secretRedBinary.length() < 8)
-           {
-               int numZeros = 8 - secretRedBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] secrettemp = secretRedBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = secrettemp[x];
-                   x += 1;
-               }
-               secretRedBinary = new String(temp);
-           }
+           String c1RedBinary = String.format("%8s", Integer.toBinaryString(c1Red)).replace(" ", "0");
+           String c2RedBinary = String.format("%8s", Integer.toBinaryString(c2Red)).replace(" ", "0");
+           String secretRedBinary = String.format("%8s",Integer.toBinaryString(secretRed)).replace(" ", "0");
            
            for(int j = 0; j < secretRedBinary.length(); j++)
            {
@@ -379,60 +328,9 @@ public class ExtendedVCS
            int c1Green = (cover[0][i] & 0x0000ff00) >> 8;
            int c2Green = (cover[1][i] & 0x0000ff00) >> 8;
            int secretGreen = (green[i] & 0x0000ff00) >> 8;
-           String c1GreenBinary = Integer.toBinaryString(c1Green);
-           if(c1GreenBinary.length() < 8)
-           {
-               int numZeros = 8 - c1GreenBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c1temp = c1GreenBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c1temp[x];
-                   x += 1;
-               }
-               c1GreenBinary = new String(temp);
-           }
-           String c2GreenBinary = Integer.toBinaryString(c2Green);
-           if(c2GreenBinary.length() < 8)
-           {
-               int numZeros = 8 - c2GreenBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c2temp = c2GreenBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c2temp[x];
-                   x += 1;
-               }
-               c2GreenBinary = new String(temp);
-           }
-           String secretGreenBinary = Integer.toBinaryString(secretGreen);
-           if(secretGreenBinary.length() < 8)
-           {
-               int numZeros = 8 - secretGreenBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] sectemp = secretGreenBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = sectemp[x];
-                   x += 1;
-               }
-               secretGreenBinary = new String(temp);
-           }
+           String c1GreenBinary = String.format("%8s", Integer.toBinaryString(c1Green)).replace(" ", "0");
+           String c2GreenBinary = String.format("%8s", Integer.toBinaryString(c2Green)).replace(" ", "0");
+           String secretGreenBinary = String.format("%8s", Integer.toBinaryString(secretGreen)).replace(" ", "0");
            
            for(int j = 0; j < secretGreenBinary.length(); j++)
            {
@@ -499,60 +397,9 @@ public class ExtendedVCS
            int c1Blue = (cover[0][i] & 0x000000ff);
            int c2Blue = (cover[1][i] & 0x000000ff);
            int secretBlue = (blue[i] & 0x000000ff);
-           String c1BlueBinary = Integer.toBinaryString(c1Blue);
-           if(c1BlueBinary.length() < 8)
-           {
-               int numZeros = 8 - c1BlueBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c1temp = c1BlueBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c1temp[x];
-                   x += 1;
-               }
-               c1BlueBinary = new String(temp);
-           }
-           String c2BlueBinary = Integer.toBinaryString(c2Blue);
-           if(c2BlueBinary.length() < 8)
-           {
-               int numZeros = 8 - c2BlueBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] c2temp = c2BlueBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = c2temp[x];
-                   x += 1;
-               }
-               c2BlueBinary = new String(temp);
-           }
-           String secretBlueBinary = Integer.toBinaryString(secretBlue);
-           if(secretBlueBinary.length() < 8)
-           {
-               int numZeros = 8 - secretBlueBinary.length();
-               char[] temp = new char[8];
-               for(int n = 0; n < numZeros; n++)
-               {
-                   temp[n] = '0';
-               }
-               char[] sectemp = secretBlueBinary.toCharArray();
-               int x = 0;
-               for(int n = numZeros; n < 8; n++)
-               {
-                   temp[n] = sectemp[x];
-                   x += 1;
-               }
-               secretBlueBinary = new String(temp);
-           }
+           String c1BlueBinary = String.format("%8s", Integer.toBinaryString(c1Blue)).replace(" ", "0");
+           String c2BlueBinary = String.format("%8s", Integer.toBinaryString(c2Blue)).replace(" ", "0");
+           String secretBlueBinary = String.format("%8s", Integer.toBinaryString(secretBlue)).replace(" ", "0");
            
            for(int j = 0; j < secretBlueBinary.length(); j++)
            {
