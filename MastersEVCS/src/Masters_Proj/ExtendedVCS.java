@@ -254,6 +254,23 @@ public class ExtendedVCS
    
    void vipSynchronization(int[] red, int[] green, int[] blue, int[][] cover)
    {
+       int[][] cover1 = new int[imgHeight][imgWidth];
+       int[][] cover2 = new int[imgHeight][imgWidth];
+       
+       int[][] encoded1 = new int[imgHeight * 2][imgWidth * 2];
+       int[][] encoded2 = new int[imgHeight * 2][imgWidth * 2];
+       
+       int n = 0;
+       for(int i = 0; i < imgHeight; i++)
+       {
+           for(int j = 0; j < imgWidth; j++)
+           {
+               cover1[i][j] = cover[0][n];
+               cover2[i][j] = cover[1][n];
+               n++;
+           }
+       }
+       
        for(int i = 0; i < cover[0].length; i++)
        {
            int c1Red = (cover[0][i] & 0x00ff0000) >> 16;
@@ -322,8 +339,9 @@ public class ExtendedVCS
                }
            }
            
-           encryptedShareRGB[0][i] = (Integer.parseInt(c1RedBinary, 2)) << 16;
-           encryptedShareRGB[1][i] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           //encryptedShareRGB[0][i] = (Integer.parseInt(c1RedBinary, 2)) << 16;
+           //encryptedShareRGB[1][i] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           
            
            int c1Green = (cover[0][i] & 0x0000ff00) >> 8;
            int c2Green = (cover[1][i] & 0x0000ff00) >> 8;
@@ -391,8 +409,8 @@ public class ExtendedVCS
                }
            }
            
-           encryptedShareRGB[0][i] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-           encryptedShareRGB[1][i] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           //encryptedShareRGB[0][i] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           //encryptedShareRGB[1][i] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
            
            int c1Blue = (cover[0][i] & 0x000000ff);
            int c2Blue = (cover[1][i] & 0x000000ff);
@@ -460,13 +478,72 @@ public class ExtendedVCS
                }
            }
            
-           encryptedShareRGB[0][i] += (Integer.parseInt(c1BlueBinary, 2));
-           encryptedShareRGB[1][i] += (Integer.parseInt(c2BlueBinary, 2));
+           //encryptedShareRGB[0][i] += (Integer.parseInt(c1BlueBinary, 2));
+           //encryptedShareRGB[1][i] += (Integer.parseInt(c2BlueBinary, 2));
+           
+           int row = i / imgWidth;
+           int column = i % imgWidth;
+           
+           /*
+           //Test 1 and 4
+           
+           encoded1[2*row][2*column] = (Integer.parseInt(secretRedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = cover1[row][column];
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(secretGreenBinary, 2)) << 16;
+           
+           encoded2[2*row][2*column] = cover2[row][column];
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(secretBlueBinary, 2));
+           encoded2[2*row + 1][2*column] = cover2[row][column]; 
+           encoded2[2*row + 1][2*column + 1] = cover2[row][column];
+           //*/
+           
+           /*
+           //Test 2 and 5
+           
+           encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1BlueBinary, 2));
+           
+           encoded2[2*row][2*column] = cover2[row][column]; 
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(c2BlueBinary, 2));
+           encoded2[2*row + 1][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+           encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           //*/
+           
+           /*
+           //Test 3 and 6
+           */
+           encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1BlueBinary, 2));
+           
+           encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           encoded2[2*row + 1][2*column] = cover2[row][column]; 
+           encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2BlueBinary, 2));
+           //*/
        }
+       
+       n = 0;
+       imgHeight *= 2;
+       imgWidth *= 2;
+       encryptedShareRGB = new int[2][imgHeight * imgWidth];
+       for(int k = 0; k < imgHeight; k++)
+       {
+            for(int j = 0; j < imgWidth; j++)
+            {
+                   encryptedShareRGB[0][n] = encoded1[k][j];
+                   encryptedShareRGB[1][n] = encoded2[k][j];
+                   n += 1;
+            }
+        }
    }
    
    /**
-    * 
+    * NO LONGER BEING USED
     * @param secretImgRGB The RGB values of the secret image
     * @param shareOriginalRGB The RGB values of the innocent images
     */
@@ -476,7 +553,7 @@ public class ExtendedVCS
        encryptedShareRGB = new int[2][imgWidth * imgHeight];
        
        //Used to bring the secret image up using a size invarint-ish technique
-       secretSharesRGB = new int[2][imgWidth * imgHeight];
+       secretSharesRGB = new int[2][imgWidth * imgHeight]; 
       
       for(int i = 0; i < secretImgRGB.length; i++)
       {
