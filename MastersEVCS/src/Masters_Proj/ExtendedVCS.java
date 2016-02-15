@@ -513,7 +513,7 @@ public class ExtendedVCS
            //*/
            
            /*
-           //Test 3 and 6
+           //Test 3 and 6 - Getting better test results
            */
            encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
            encoded1[2*row][2*column + 1] = (Integer.parseInt(c1GreenBinary, 2)) << 8;
