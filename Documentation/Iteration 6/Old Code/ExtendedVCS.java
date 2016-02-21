@@ -7,17 +7,11 @@ package Masters_Proj;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 /**
- * This class contains all the methods needed to
- * perform the necessary operations for visual
- * cryptography.
- * 
- * @author Allison Holt
- * @version 02-21-2016
+ *
+ * @author allisonholt
  */
 public class ExtendedVCS 
 {
@@ -37,13 +31,8 @@ public class ExtendedVCS
    private int[] secretMsgPixels;
    
    
-   /**
-   * This version of the constructor is meant to perform the encryption process.
-   * 
-   * @param secretMsgIn The image to be encoded into the cover images.
-   * @param innocentSharesIn The array contains the two cover images for the encryption process.
-   */
-   public ExtendedVCS(BufferedImage secretMsgIn, BufferedImage[] innocentSharesIn)
+   //For encryption purposes
+   ExtendedVCS(BufferedImage secretMsgIn, BufferedImage[] innocentSharesIn)
    {
       k = 2;
       n = 2;
@@ -55,12 +44,7 @@ public class ExtendedVCS
    }
    
    //For decryption purposes
-   /**
-   * This version of the constructor is meant to perform the decryption process.
-   * 
-   * @param shareImgs The array contains two encoded images to be stacked and the secret decrypted.
-   */
-   public ExtendedVCS(BufferedImage[] shareImgs)
+   ExtendedVCS(BufferedImage[] shareImgs)
    {
       numSharesToDecrypt = 2;
       sharesToDecrypt = shareImgs;
@@ -68,51 +52,27 @@ public class ExtendedVCS
       imgHeight = shareImgs[0].getHeight();
    }
    
-   /**
-   * Method returns the width of the images.
-   *
-   * @return The width of the images used in the encryption/decryption.
-   */
-   public int getImgWidth()
+   int getImgWidth()
    {
       return imgWidth;
    }
    
-   /**
-   * Method returns the height of the images.
-   *
-   * @return The height of the images used in the encryption/decryption.
-   */
-   public int getImgHeight()
+   int getImgHeight()
    {
       return imgHeight;
    }
    
-   /**
-   * Method returns the pixels for the encoded images.
-   *
-   * @return The 2D array containing the pixel information for both encoded images.
-   */
-   public int[][] getRGBPixelsForShares()
+   int[][] getRGBPixelsForShares()
    {
       return encryptedShareRGB;
    }
    
-   /**
-   * Method returns the pixels of the decrypted secret.
-   *
-   * @return The array containing the pixel information for the decrypted secret image.
-   */
-   public int[] getDecryptImgPixels()
+   int[] getDecryptImgPixels()
    {
       return secretMsgPixels;
    }
    
-   /**
-   * Method that orchestrates the encryption process and calls the helper
-   * methods necessary.
-   */
-   public void encryptImage()
+   void encryptImage()
    {
       int[] secretRGB = new int[imgWidth * imgHeight];
       //A cover image is the same as an innocent image
@@ -142,13 +102,7 @@ public class ExtendedVCS
       
    }
    
-   /**
-   * Method utilizes the Floyd-Steinberg dithering technique for blending
-   * the pixels together for a more continuous look.
-   *
-   * @param secret The array containing the pixels of an image.
-   */
-   private void errorDiffusion(int[] image)
+   void errorDiffusion(int[] image)
    {
        int x[][] = new int[imgHeight][imgWidth];
        int u[][] = new int [imgHeight][imgWidth];
@@ -272,16 +226,7 @@ public class ExtendedVCS
        }
    }
    
-   /**
-   * Method breaks the secret image is broken up into three separate images
-   * based on the red, green, and blue concentrations.
-   *
-   * @param secret The 2D array containing the pixels of the secret images.
-   * @param red The red concentration of each pixel in the secret message.
-   * @param green The green concentration of each pixel in the secret message.
-   * @param blue The blue concentration of each pixel in the secret message.
-   */
-   private void splitSecretRGB(int[] secret, int[] red, int[] green, int[] blue)
+   void splitSecretRGB(int[] secret, int[] red, int[] green, int[] blue)
    {
        for(int i = 0; i < secret.length; i++)
        {
@@ -307,28 +252,13 @@ public class ExtendedVCS
        }
    }
    
-   /**
-   * Method takes the color shares of the secret message and the pixels of the
-   * cover images and combines them so the cover images don't lose their meaning
-   * while encoding the secret message.  The process does perform pixel expansion,
-   * i.e. a single pixel gets represented by four in the encoded image.  The order
-   * of the pixels (red, green, blue, or cover) get shuffled with every pixel.
-   *
-   * @param red The red concentration of each pixel in the secret message.
-   * @param green The green concentration of each pixel in the secret message.
-   * @param blue The blue concentration of each pixel in the secret message.
-   * @param cover The 2D array containing the pixels of the cover images.
-   */
-   private void vipSynchronization(int[] red, int[] green, int[] blue, int[][] cover)
+   void vipSynchronization(int[] red, int[] green, int[] blue, int[][] cover)
    {
        int[][] cover1 = new int[imgHeight][imgWidth];
        int[][] cover2 = new int[imgHeight][imgWidth];
        
        int[][] encoded1 = new int[imgHeight * 2][imgWidth * 2];
        int[][] encoded2 = new int[imgHeight * 2][imgWidth * 2];
-       
-       ArrayList<String> colorOrder = new ArrayList<String>();
-       Collections.addAll(colorOrder, "red", "green", "blue", "cover");
        
        int n = 0;
        for(int i = 0; i < imgHeight; i++)
@@ -409,6 +339,10 @@ public class ExtendedVCS
                }
            }
            
+           //encryptedShareRGB[0][i] = (Integer.parseInt(c1RedBinary, 2)) << 16;
+           //encryptedShareRGB[1][i] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           
+           
            int c1Green = (cover[0][i] & 0x0000ff00) >> 8;
            int c2Green = (cover[1][i] & 0x0000ff00) >> 8;
            int secretGreen = (green[i] & 0x0000ff00) >> 8;
@@ -474,6 +408,9 @@ public class ExtendedVCS
                    }
                }
            }
+           
+           //encryptedShareRGB[0][i] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           //encryptedShareRGB[1][i] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
            
            int c1Blue = (cover[0][i] & 0x000000ff);
            int c2Blue = (cover[1][i] & 0x000000ff);
@@ -541,157 +478,96 @@ public class ExtendedVCS
                }
            }
            
+           //encryptedShareRGB[0][i] += (Integer.parseInt(c1BlueBinary, 2));
+           //encryptedShareRGB[1][i] += (Integer.parseInt(c2BlueBinary, 2));
+           
            int row = i / imgWidth;
            int column = i % imgWidth;
            
            /*
+           //Test 1 and 4
+           
+           encoded1[2*row][2*column] = (Integer.parseInt(secretRedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = cover1[row][column];
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(secretGreenBinary, 2)) << 16;
+           
+           encoded2[2*row][2*column] = cover2[row][column];
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(secretBlueBinary, 2));
+           encoded2[2*row + 1][2*column] = cover2[row][column]; 
+           encoded2[2*row + 1][2*column + 1] = cover2[row][column];
+           //*/
+           
+           /*
+           //Test 2 and 5
+           
+           encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1BlueBinary, 2));
+           
+           encoded2[2*row][2*column] = cover2[row][column]; 
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(c2BlueBinary, 2));
+           encoded2[2*row + 1][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+           encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           //*/
+           
+           /*
+           //Test 3 and 6
+          
+           encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+           encoded1[2*row][2*column + 1] = (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1BlueBinary, 2));
+           
+           encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           encoded2[2*row][2*column + 1] = (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           encoded2[2*row + 1][2*column] = cover2[row][column]; 
+           encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2BlueBinary, 2));
+           //*/
+           
+           /*
            //Test for lightening
            */
-           Collections.shuffle(colorOrder);
+           encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+           encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+           encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
+           //encoded1[2*row][2*column] += c1Green << 8;
+           //encoded1[2*row][2*column] += c1Blue;
            
-           if(colorOrder.get(0).equals("red"))
-           {
-               encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(0).equals("green"))
-           {
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(0).equals("blue"))
-           {
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt(c1BlueBinary, 2));
-               
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row][2*column] = cover1[row][column];
-               encoded2[2*row][2*column] = cover2[row][column];
-           }
+           encoded1[2*row][2*column + 1] = (Integer.parseInt("10000000", 2)) << 16;
+           //encoded1[2*row][2*column + 1] = c1Red << 16;
+           encoded1[2*row][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+           encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+           //encoded1[2*row][2*column + 1] += c1Blue;
            
-           if(colorOrder.get(1).equals("red"))
-           {
-               encoded1[2*row][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(1).equals("green"))
-           {
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(1).equals("blue"))
-           {
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
-               
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row][2*column + 1] = cover1[row][column];
-               encoded2[2*row][2*column + 1] = cover2[row][column];
-           }
+           encoded1[2*row + 1][2*column] = cover1[row][column]; 
            
-           if(colorOrder.get(2).equals("red"))
-           {
-               encoded1[2*row + 1][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row + 1][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(2).equals("green"))
-           {
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(2).equals("blue"))
-           {
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt(c1BlueBinary, 2));
-               
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row + 1][2*column] = cover1[row][column];
-               encoded2[2*row + 1][2*column] = cover2[row][column];
-           }
+           encoded1[2*row + 1][2*column + 1] = (Integer.parseInt("10000000", 2)) << 16;
+           encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+           //encoded1[2*row + 1][2*column + 1] = c1Red << 16;
+           //encoded1[2*row + 1][2*column + 1] += c1Green << 8;
+           encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
            
-           if(colorOrder.get(3).equals("red"))
-           {
-               encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(3).equals("green"))
-           {
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-               
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(3).equals("blue"))
-           {
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
-               
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row + 1][2*column + 1] = cover1[row][column];
-               encoded2[2*row + 1][2*column + 1] = cover2[row][column];
-           }
+           encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16;
+           encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+           encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
+           //encoded2[2*row][2*column] += c2Green << 8;
+           //encoded2[2*row][2*column] += c2Blue;
+           
+           encoded2[2*row][2*column + 1] = (Integer.parseInt("10000000", 2)) << 16;
+           //encoded2[2*row][2*column + 1] = c2Red << 16;
+           encoded2[2*row][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+           encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+           //encoded2[2*row][2*column + 1] += c2Blue;
+           
+           encoded2[2*row + 1][2*column] = cover2[row][column]; 
+           
+           encoded2[2*row + 1][2*column + 1] = (Integer.parseInt("10000000", 2)) << 16;
+           encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+           //encoded2[2*row + 1][2*column + 1] = c2Red << 16;
+           //encoded2[2*row + 1][2*column + 1] += c2Green << 8;
+           encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
            //*/
        }
        
@@ -711,11 +587,63 @@ public class ExtendedVCS
    }
    
    /**
-   * Method decrypts two encoded images by XOR-ing the binary color values together.
-   * The XOR technique decrypts the encoded images as if they were printed on
-   * transparencies and physically stacked.
-   */
-   public void decryptImage()
+    * NO LONGER BEING USED
+    * @param secretImgRGB The RGB values of the secret image
+    * @param shareOriginalRGB The RGB values of the innocent images
+    */
+   void createPixelsOfShares(int[] secretImgRGB, int[][] shareOriginalRGB)
+   {
+      //Used to store the embedded RGB values
+       encryptedShareRGB = new int[2][imgWidth * imgHeight];
+       
+       //Used to bring the secret image up using a size invarint-ish technique
+       secretSharesRGB = new int[2][imgWidth * imgHeight]; 
+      
+      for(int i = 0; i < secretImgRGB.length; i++)
+      {
+         int redVal = (secretImgRGB[i] & 0x00ff0000) >> 16;
+         int greenVal = (secretImgRGB[i] & 0x0000ff00) >> 8;
+         int blueVal = (secretImgRGB[i] & 0x000000ff);
+         Pixel orig = new Pixel(redVal, greenVal, blueVal);
+         
+         redVal = (shareOriginalRGB[0][i] & 0x00ff0000) >> 16;
+         greenVal = (shareOriginalRGB[0][i] & 0x0000ff00) >> 8;
+         blueVal = (shareOriginalRGB[0][i] & 0x000000ff);
+         Pixel innocent0 = new Pixel(redVal, greenVal, blueVal);
+         
+         redVal = (shareOriginalRGB[1][i] & 0x00ff0000) >> 16;
+         greenVal = (shareOriginalRGB[1][i] & 0x0000ff00) >> 8;
+         blueVal = (shareOriginalRGB[1][i] & 0x000000ff);
+         Pixel innocent1 = new Pixel(redVal, greenVal, blueVal);
+         
+         Random randomGen = new Random();
+         int maxGrayCon = orig.getConcentration('r');
+         int grayCon1 = randomGen.nextInt(maxGrayCon + 1);
+         int grayCon2 = maxGrayCon - grayCon1;
+         
+         Color secretGray1 = new Color(grayCon1, grayCon1, grayCon1);
+         secretSharesRGB[0][i] = secretGray1.getRGB();
+         
+         Color secretGray2 = new Color(grayCon2, grayCon2, grayCon2);
+         secretSharesRGB[1][i] = secretGray2.getRGB();
+         
+         int innocent1Con = innocent0.getConcentration('r');
+         int embedded1Con = (innocent1Con + grayCon1) / 2;
+         if(embedded1Con < 0)
+             embedded1Con = 0;
+         Color embedded1 = new Color(embedded1Con, embedded1Con, embedded1Con);
+         encryptedShareRGB[0][i] = embedded1.getRGB();
+         
+         int innocent2Con = innocent1.getConcentration('r');
+         int embedded2Con = (innocent2Con + grayCon2) / 2;
+         if(embedded2Con < 0)
+             embedded2Con = 0;
+         Color embedded2 = new Color(embedded2Con, embedded2Con, embedded2Con);
+         encryptedShareRGB[1][i] = embedded2.getRGB();
+      }
+   }
+   
+   void decryptImage()
    {
       //Make a 2d array of pixel arrays
       int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
