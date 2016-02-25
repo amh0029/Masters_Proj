@@ -711,9 +711,9 @@ public class ExtendedVCS
    }
    
    /**
-   * Method decrypts two encoded images by XOR-ing the binary color values together.
-   * The XOR technique decrypts the encoded images as if they were printed on
-   * transparencies and physically stacked.
+   * Method TBD.
+   * Want to focus on decrypting images and not worrying about if this would
+   * work on transparencies.
    */
    public void decryptImage()
    {
@@ -748,6 +748,100 @@ public class ExtendedVCS
          Color decryptedColor = new Color(redVal, greenVal, blueVal);
          secretMsgPixels[i] = decryptedColor.getRGB();
       }
+   }
+      
+   /**
+   * Method decrypts two encoded images by XOR-ing the binary color values together.
+   * The XOR technique decrypts the encoded images as if they were printed on
+   * transparencies and physically stacked.
+   */
+   public void decryptImageTransparencyMethod()
+   {
+      
+      //Make a 2d array of pixel arrays
+      int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
+      
+      //getRGB pixels of BufferedImages
+      for(int i = 0; i < numSharesToDecrypt; i++)
+      {
+         sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, embeddedPixels[i], 0, imgWidth);
+      }
+      
+      secretMsgPixels = new int[(imgWidth / 2) * (imgHeight / 2)];
+      int[][] secretImg = new int[imgHeight / 2][imgWidth / 2];
+      int[][] encoded1 = new int[imgHeight][imgWidth];
+      int[][] encoded2 = new int[imgHeight][imgWidth];
+       
+       int n = 0;
+       for(int i = 0; i < imgHeight; i++)
+       {
+           for(int j = 0; j < imgWidth; j++)
+           {
+               encoded1[i][j] = embeddedPixels[0][n];
+               encoded2[i][j] = embeddedPixels[1][n];
+               n++;
+           }
+       }
+      
+      imgHeight = imgHeight / 2;
+      imgWidth = imgWidth / 2;
+      for(int r = 0; r < imgHeight; r++)
+      {
+          for(int c = 0; c < imgWidth; c++)
+          {
+              int redConcentrationAvg = 0;
+              int greenConcentrationAvg = 0;
+              int blueConcentrationAvg = 0;
+              
+              redConcentrationAvg += (encoded1[2 * r][2 * c] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
+              
+              redConcentrationAvg += (encoded2[2 * r][2 * c] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
+              redConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
+              
+              greenConcentrationAvg += (encoded1[2 * r][2 * c] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
+              
+              greenConcentrationAvg += (encoded2[2 * r][2 * c] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
+              greenConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
+              
+              blueConcentrationAvg += (encoded1[2 * r][2 * c] & 0x000000ff);
+              blueConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x000000ff);
+              blueConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x000000ff);
+              blueConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x000000ff);
+              
+              blueConcentrationAvg += (encoded2[2 * r][2 * c] & 0x000000ff) >> 16;
+              blueConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x000000ff) >> 16;
+              blueConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x000000ff) >> 16;
+              blueConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x000000ff) >> 16;
+              
+              redConcentrationAvg /= 8;
+              greenConcentrationAvg /= 8;
+              blueConcentrationAvg /= 8;
+              
+              Color decryptedColor = new Color(redConcentrationAvg, greenConcentrationAvg, blueConcentrationAvg);
+              secretImg[r][c] = decryptedColor.getRGB();
+          }
+      }
+      
+      int secretIndex = 0;
+      for(int i = 0; i < imgHeight; i++)
+      {
+          for(int j = 0; j < imgWidth; j++)
+          {
+              secretMsgPixels[secretIndex] = secretImg[i][j];
+              secretIndex += 1;
+          }
+      }
+      
    }
 
 }
