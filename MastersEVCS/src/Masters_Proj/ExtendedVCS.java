@@ -137,8 +137,8 @@ public class ExtendedVCS
       vipSynchronization(secretRed, secretGreen, secretBlue, coverRGB);
       
       //Perform error diffusion on cover images with secret encoded
-      errorDiffusion(encryptedShareRGB[0]);
-      errorDiffusion(encryptedShareRGB[1]);
+      //errorDiffusion(encryptedShareRGB[0]);
+      //errorDiffusion(encryptedShareRGB[1]);
       
    }
    
@@ -150,126 +150,126 @@ public class ExtendedVCS
    */
    private void errorDiffusion(int[] image)
    {
-       int x[][] = new int[imgHeight][imgWidth];
-       int u[][] = new int [imgHeight][imgWidth];
+      int x[][] = new int[imgHeight][imgWidth];
+      int u[][] = new int [imgHeight][imgWidth];
        
-       int i = 0;
-       for(int n = 0; n < imgHeight; n++)
-       {
-           for(int m = 0; m < imgWidth; m++)
-           {
-               x[n][m] = image[i];
-               i += 1;
-           }
-       }
+      int i = 0;
+      for(int n = 0; n < imgHeight; n++)
+      {
+         for(int m = 0; m < imgWidth; m++)
+         {
+            x[n][m] = image[i];
+            i += 1;
+         }
+      }
        
-       for(int n = 0; n < imgHeight; n++)
-       {
-           for(int m = 0; m < imgWidth; m++)
-           {
-               u[n][m] += x[n][m];
+      for(int n = 0; n < imgHeight; n++)
+      {
+         for(int m = 0; m < imgWidth; m++)
+         {
+            u[n][m] += x[n][m];
                
-               int xRed = (x[n][m] & 0x00ff0000) >> 16;
-               int xGreen = (x[n][m] & 0x0000ff00) >> 8;
-               int xBlue = (x[n][m] & 0x000000ff);
+            int xRed = (x[n][m] & 0x00ff0000) >> 16;
+            int xGreen = (x[n][m] & 0x0000ff00) >> 8;
+            int xBlue = (x[n][m] & 0x000000ff);
                
-               int uRed = (u[n][m] & 0x00ff0000) >> 16;
-               int uGreen = (u[n][m] & 0x0000ff00) >> 8;
-               int uBlue = (u[n][m] & 0x000000ff);
+            int uRed = (u[n][m] & 0x00ff0000) >> 16;
+            int uGreen = (u[n][m] & 0x0000ff00) >> 8;
+            int uBlue = (u[n][m] & 0x000000ff);
                
-               int quantErrorRed = uRed - xRed;
-               int quantErrorGreen = uGreen - xGreen;
-               int quantErrorBlue = uBlue - xBlue;
+            int quantErrorRed = uRed - xRed;
+            int quantErrorGreen = uGreen - xGreen;
+            int quantErrorBlue = uBlue - xBlue;
                
-               if(xRed > 127)
+            if(xRed > 127)
+            {
+               if((m + 1) < imgWidth)
                {
-                   if((m + 1) < imgWidth)
-                   {
-                       int temp = quantErrorRed * 7 / 16;
-                       temp = temp << 16;
-                       u[n][m + 1] += temp;
-                   }
-                   if((m - 1) >= 0 && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorRed * 3 / 16;
-                       temp = temp << 16;
-                       u[n + 1][m - 1] += temp;
-                   }
-                   if((n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorRed * 5 / 16;
-                       temp = temp << 16;
-                       u[n + 1][m] += temp;
-                   }
-                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorRed * 1 / 16;
-                       temp = temp << 16;
-                       u[n + 1][m + 1] += temp;
-                   }
+                  int temp = quantErrorRed * 7 / 16;
+                  temp = temp << 16;
+                  u[n][m + 1] += temp;
                }
-               if(xGreen > 127)
+               if((m - 1) >= 0 && (n + 1) < imgHeight)
                {
-                   if((m + 1) < imgWidth)
-                   {
-                       int temp = quantErrorGreen * 7 / 16;
-                       temp = temp << 8;
-                       u[n][m + 1] += temp;
-                   }
-                   if((m - 1) >= 0 && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorGreen * 3 / 16;
-                       temp = temp << 8;
-                       u[n + 1][m - 1] += temp;
-                   }
-                   if((n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorGreen * 5 / 16;
-                       temp = temp << 8;
-                       u[n + 1][m] += temp;
-                   }
-                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorGreen * 1 / 16;
-                       temp = temp << 8;
-                       u[n + 1][m + 1] += temp;
-                   }
+                  int temp = quantErrorRed * 3 / 16;
+                  temp = temp << 16;
+                  u[n + 1][m - 1] += temp;
                }
-               if(xBlue > 127)
+               if((n + 1) < imgHeight)
                {
-                   if((m + 1) < imgWidth)
-                   {
-                       int temp = quantErrorBlue * 7 / 16;
-                       u[n][m + 1] += temp;
-                   }
-                   if((m - 1) >= 0 && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorBlue * 3 / 16;
-                       u[n + 1][m - 1] += temp;
-                   }
-                   if((n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorBlue * 5 / 16;
-                       u[n + 1][m] += temp;
-                   }
-                   if((m + 1) < imgWidth && (n + 1) < imgHeight)
-                   {
-                       int temp = quantErrorBlue * 1 / 16;
-                       u[n + 1][m + 1] += temp;
-                   }
+                  int temp = quantErrorRed * 5 / 16;
+                  temp = temp << 16;
+                  u[n + 1][m] += temp;
                }
-           }
-       }
+               if((m + 1) < imgWidth && (n + 1) < imgHeight)
+               {
+                  int temp = quantErrorRed * 1 / 16;
+                  temp = temp << 16;
+                  u[n + 1][m + 1] += temp;
+               }
+            }
+            if(xGreen > 127)
+            {
+               if((m + 1) < imgWidth)
+               {
+                  int temp = quantErrorGreen * 7 / 16;
+                  temp = temp << 8;
+                  u[n][m + 1] += temp;
+               }
+               if((m - 1) >= 0 && (n + 1) < imgHeight)
+               {
+                  int temp = quantErrorGreen * 3 / 16;
+                  temp = temp << 8;
+                  u[n + 1][m - 1] += temp;
+               }
+               if((n + 1) < imgHeight)
+               {
+                  int temp = quantErrorGreen * 5 / 16;
+                  temp = temp << 8;
+                  u[n + 1][m] += temp;
+               }
+               if((m + 1) < imgWidth && (n + 1) < imgHeight)
+               {
+                  int temp = quantErrorGreen * 1 / 16;
+                  temp = temp << 8;
+                  u[n + 1][m + 1] += temp;
+               }
+            }
+            if(xBlue > 127)
+            {
+               if((m + 1) < imgWidth)
+               {
+                  int temp = quantErrorBlue * 7 / 16;
+                  u[n][m + 1] += temp;
+               }
+               if((m - 1) >= 0 && (n + 1) < imgHeight)
+               {
+                  int temp = quantErrorBlue * 3 / 16;
+                  u[n + 1][m - 1] += temp;
+               }
+               if((n + 1) < imgHeight)
+               {
+                  int temp = quantErrorBlue * 5 / 16;
+                  u[n + 1][m] += temp;
+               }
+               if((m + 1) < imgWidth && (n + 1) < imgHeight)
+               {
+                  int temp = quantErrorBlue * 1 / 16;
+                  u[n + 1][m + 1] += temp;
+               }
+            }
+         }
+      }
        
-       int j = 0;
-       for(int n = 0; n < imgHeight; n++)
-       {
-           for(int m = 0; m < imgWidth; m++)
-           {
-               image[j] = u[n][m];
-               j += 1;
-           }
-       }
+      int j = 0;
+      for(int n = 0; n < imgHeight; n++)
+      {
+         for(int m = 0; m < imgWidth; m++)
+         {
+            image[j] = u[n][m];
+            j += 1;
+         }
+      }
    }
    
    /**
@@ -283,8 +283,8 @@ public class ExtendedVCS
    */
    private void splitSecretRGB(int[] secret, int[] red, int[] green, int[] blue)
    {
-       for(int i = 0; i < secret.length; i++)
-       {
+      for(int i = 0; i < secret.length; i++)
+      {
          int redVal = (secret[i] & 0x00ff0000) >> 16;
          int greenVal = (secret[i] & 0x0000ff00) >> 8;
          int blueVal = (secret[i] & 0x000000ff);
@@ -304,7 +304,7 @@ public class ExtendedVCS
          red[i] = redColor.getRGB();
          green[i] = greenColor.getRGB();
          blue[i] = blueColor.getRGB();
-       }
+      }
    }
    
    /**
@@ -321,401 +321,610 @@ public class ExtendedVCS
    */
    private void vipSynchronization(int[] red, int[] green, int[] blue, int[][] cover)
    {
-       int[][] cover1 = new int[imgHeight][imgWidth];
-       int[][] cover2 = new int[imgHeight][imgWidth];
+      int[][] cover1 = new int[imgHeight][imgWidth];
+      int[][] cover2 = new int[imgHeight][imgWidth];
        
-       int[][] encoded1 = new int[imgHeight * 2][imgWidth * 2];
-       int[][] encoded2 = new int[imgHeight * 2][imgWidth * 2];
+      int[][] encoded1 = new int[imgHeight * 2][imgWidth * 2];
+      int[][] encoded2 = new int[imgHeight * 2][imgWidth * 2];
        
-       ArrayList<String> colorOrder = new ArrayList<String>();
-       Collections.addAll(colorOrder, "red", "green", "blue", "cover");
+      ArrayList<String> colorOrder = new ArrayList<String>();
+      Collections.addAll(colorOrder, "red", "green", "blue", "cover");
        
-       int n = 0;
-       for(int i = 0; i < imgHeight; i++)
-       {
-           for(int j = 0; j < imgWidth; j++)
-           {
-               cover1[i][j] = cover[0][n];
-               cover2[i][j] = cover[1][n];
-               n++;
-           }
-       }
+      int n = 0;
+      for(int i = 0; i < imgHeight; i++)
+      {
+         for(int j = 0; j < imgWidth; j++)
+         {
+            cover1[i][j] = cover[0][n];
+            cover2[i][j] = cover[1][n];
+            n++;
+         }
+      }
        
-       for(int i = 0; i < cover[0].length; i++)
-       {
-           int c1Red = (cover[0][i] & 0x00ff0000) >> 16;
-           int c2Red = (cover[1][i] & 0x00ff0000) >> 16;
-           int secretRed = (red[i] & 0x00ff0000) >> 16;
-           String c1RedBinary = String.format("%8s", Integer.toBinaryString(c1Red)).replace(" ", "0");
-           String c2RedBinary = String.format("%8s", Integer.toBinaryString(c2Red)).replace(" ", "0");
-           String secretRedBinary = String.format("%8s",Integer.toBinaryString(secretRed)).replace(" ", "0");
+      for(int i = 0; i < cover[0].length; i++)
+      {
+         int c1Red = (cover[0][i] & 0x00ff0000) >> 16;
+         int c2Red = (cover[1][i] & 0x00ff0000) >> 16;
+         int secretRed = (red[i] & 0x00ff0000) >> 16;
+         String c1RedBinary = String.format("%8s", Integer.toBinaryString(c1Red)).replace(" ", "0");
+         String c2RedBinary = String.format("%8s", Integer.toBinaryString(c2Red)).replace(" ", "0");
+         String secretRedBinary = String.format("%8s",Integer.toBinaryString(secretRed)).replace(" ", "0");
            
-           for(int j = 0; j < secretRedBinary.length(); j++)
-           {
-               if(secretRedBinary.charAt(j) == '1'
+         for(int j = 0; j < secretRedBinary.length(); j++)
+         {
+            if(secretRedBinary.charAt(j) == '1'
                        && c1RedBinary.charAt(j) == c2RedBinary.charAt(j))
-               {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c1 stays the same and c2 is flipped
                    if temp == 1 then c2 stays the same and c1 is flipped
                    */
-                   if(temp == 0 && c2RedBinary.charAt(j) == '1')
-                   {
-                       char[] c2Array = c2RedBinary.toCharArray();
-                       c2Array[j] = '0';
-                       c2RedBinary = new String(c2Array);
-                   }
-                   else if(temp == 0 && c2RedBinary.charAt(j) == '0')
-                   {
-                       char[] c2Array = c2RedBinary.toCharArray();
-                       c2Array[j] = '1';
-                       c2RedBinary = new String(c2Array);
-                   }
-                   else if(temp == 1 && c1RedBinary.charAt(j) == '1')
-                   {
-                       char[] c1Array = c1RedBinary.toCharArray();
-                       c1Array[j] = '0';
-                       c1RedBinary = new String(c1Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1RedBinary.toCharArray();
-                       c1Array[j] = '1';
-                       c1RedBinary = new String(c1Array);
-                   }
+               if(temp == 0 && c2RedBinary.charAt(j) == '1')
+               {
+                  char[] c2Array = c2RedBinary.toCharArray();
+                  c2Array[j] = '0';
+                  c2RedBinary = new String(c2Array);
+               }
+               else if(temp == 0 && c2RedBinary.charAt(j) == '0')
+               {
+                  char[] c2Array = c2RedBinary.toCharArray();
+                  c2Array[j] = '1';
+                  c2RedBinary = new String(c2Array);
+               }
+               else if(temp == 1 && c1RedBinary.charAt(j) == '1')
+               {
+                  char[] c1Array = c1RedBinary.toCharArray();
+                  c1Array[j] = '0';
+                  c1RedBinary = new String(c1Array);
                }
                else
                {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+                  char[] c1Array = c1RedBinary.toCharArray();
+                  c1Array[j] = '1';
+                  c1RedBinary = new String(c1Array);
+               }
+            }
+            else
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c2 bit is set to c1 bit
                    if temp == 1 then c1 bit is set to c2 bit
                    */
-                   if(temp == 0)
-                   {
-                       char[] c2Array = c2RedBinary.toCharArray();
-                       c2Array[j] = c1RedBinary.charAt(j);
-                       c2RedBinary = new String(c2Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1RedBinary.toCharArray();
-                       c1Array[j] = c2RedBinary.charAt(j);
-                       c1RedBinary = new String(c1Array);
-                   }
+               if(temp == 0)
+               {
+                  char[] c2Array = c2RedBinary.toCharArray();
+                  c2Array[j] = c1RedBinary.charAt(j);
+                  c2RedBinary = new String(c2Array);
                }
-           }
+               else
+               {
+                  char[] c1Array = c1RedBinary.toCharArray();
+                  c1Array[j] = c2RedBinary.charAt(j);
+                  c1RedBinary = new String(c1Array);
+               }
+            }
+         }
            
-           int c1Green = (cover[0][i] & 0x0000ff00) >> 8;
-           int c2Green = (cover[1][i] & 0x0000ff00) >> 8;
-           int secretGreen = (green[i] & 0x0000ff00) >> 8;
-           String c1GreenBinary = String.format("%8s", Integer.toBinaryString(c1Green)).replace(" ", "0");
-           String c2GreenBinary = String.format("%8s", Integer.toBinaryString(c2Green)).replace(" ", "0");
-           String secretGreenBinary = String.format("%8s", Integer.toBinaryString(secretGreen)).replace(" ", "0");
+         int c1Green = (cover[0][i] & 0x0000ff00) >> 8;
+         int c2Green = (cover[1][i] & 0x0000ff00) >> 8;
+         int secretGreen = (green[i] & 0x0000ff00) >> 8;
+         String c1GreenBinary = String.format("%8s", Integer.toBinaryString(c1Green)).replace(" ", "0");
+         String c2GreenBinary = String.format("%8s", Integer.toBinaryString(c2Green)).replace(" ", "0");
+         String secretGreenBinary = String.format("%8s", Integer.toBinaryString(secretGreen)).replace(" ", "0");
            
-           for(int j = 0; j < secretGreenBinary.length(); j++)
-           {
-               if(secretGreenBinary.charAt(j) == '1'
+         for(int j = 0; j < secretGreenBinary.length(); j++)
+         {
+            if(secretGreenBinary.charAt(j) == '1'
                        && c1GreenBinary.charAt(j) == c2GreenBinary.charAt(j))
-               {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c1 stays the same and c2 is flipped
                    if temp == 1 then c2 stays the same and c1 is flipped
                    */
-                   if(temp == 0 && c2GreenBinary.charAt(j) == '1')
-                   {
-                       char[] c2Array = c2GreenBinary.toCharArray();
-                       c2Array[j] = '0';
-                       c2GreenBinary = new String(c2Array);
-                   }
-                   else if(temp == 0 && c2GreenBinary.charAt(j) == '0')
-                   {
-                       char[] c2Array = c2GreenBinary.toCharArray();
-                       c2Array[j] = '1';
-                       c2GreenBinary = new String(c2Array);
-                   }
-                   else if(temp == 1 && c1GreenBinary.charAt(j) == '1')
-                   {
-                       char[] c1Array = c1GreenBinary.toCharArray();
-                       c1Array[j] = '0';
-                       c1GreenBinary = new String(c1Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1GreenBinary.toCharArray();
-                       c1Array[j] = '1';
-                       c1GreenBinary = new String(c1Array);
-                   }
+               if(temp == 0 && c2GreenBinary.charAt(j) == '1')
+               {
+                  char[] c2Array = c2GreenBinary.toCharArray();
+                  c2Array[j] = '0';
+                  c2GreenBinary = new String(c2Array);
+               }
+               else if(temp == 0 && c2GreenBinary.charAt(j) == '0')
+               {
+                  char[] c2Array = c2GreenBinary.toCharArray();
+                  c2Array[j] = '1';
+                  c2GreenBinary = new String(c2Array);
+               }
+               else if(temp == 1 && c1GreenBinary.charAt(j) == '1')
+               {
+                  char[] c1Array = c1GreenBinary.toCharArray();
+                  c1Array[j] = '0';
+                  c1GreenBinary = new String(c1Array);
                }
                else
                {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+                  char[] c1Array = c1GreenBinary.toCharArray();
+                  c1Array[j] = '1';
+                  c1GreenBinary = new String(c1Array);
+               }
+            }
+            else
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c2 bit is set to c1 bit
                    if temp == 1 then c1 bit is set to c2 bit
                    */
-                   if(temp == 0)
-                   {
-                       char[] c2Array = c2GreenBinary.toCharArray();
-                       c2Array[j] = c1GreenBinary.charAt(j);
-                       c2GreenBinary = new String(c2Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1GreenBinary.toCharArray();
-                       c1Array[j] = c2GreenBinary.charAt(j);
-                       c1GreenBinary = new String(c1Array);
-                   }
+               if(temp == 0)
+               {
+                  char[] c2Array = c2GreenBinary.toCharArray();
+                  c2Array[j] = c1GreenBinary.charAt(j);
+                  c2GreenBinary = new String(c2Array);
                }
-           }
+               else
+               {
+                  char[] c1Array = c1GreenBinary.toCharArray();
+                  c1Array[j] = c2GreenBinary.charAt(j);
+                  c1GreenBinary = new String(c1Array);
+               }
+            }
+         }
            
-           int c1Blue = (cover[0][i] & 0x000000ff);
-           int c2Blue = (cover[1][i] & 0x000000ff);
-           int secretBlue = (blue[i] & 0x000000ff);
-           String c1BlueBinary = String.format("%8s", Integer.toBinaryString(c1Blue)).replace(" ", "0");
-           String c2BlueBinary = String.format("%8s", Integer.toBinaryString(c2Blue)).replace(" ", "0");
-           String secretBlueBinary = String.format("%8s", Integer.toBinaryString(secretBlue)).replace(" ", "0");
+         int c1Blue = (cover[0][i] & 0x000000ff);
+         int c2Blue = (cover[1][i] & 0x000000ff);
+         int secretBlue = (blue[i] & 0x000000ff);
+         String c1BlueBinary = String.format("%8s", Integer.toBinaryString(c1Blue)).replace(" ", "0");
+         String c2BlueBinary = String.format("%8s", Integer.toBinaryString(c2Blue)).replace(" ", "0");
+         String secretBlueBinary = String.format("%8s", Integer.toBinaryString(secretBlue)).replace(" ", "0");
            
-           for(int j = 0; j < secretBlueBinary.length(); j++)
-           {
-               if(secretBlueBinary.charAt(j) == '1'
+         for(int j = 0; j < secretBlueBinary.length(); j++)
+         {
+            if(secretBlueBinary.charAt(j) == '1'
                        && c1BlueBinary.charAt(j) == c2BlueBinary.charAt(j))
-               {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c1 stays the same and c2 is flipped
                    if temp == 1 then c2 stays the same and c1 is flipped
                    */
-                   if(temp == 0 && c2BlueBinary.charAt(j) == '1')
-                   {
-                       char[] c2Array = c2BlueBinary.toCharArray();
-                       c2Array[j] = '0';
-                       c2BlueBinary = new String(c2Array);
-                   }
-                   else if(temp == 0 && c2BlueBinary.charAt(j) == '0')
-                   {
-                       char[] c2Array = c2BlueBinary.toCharArray();
-                       c2Array[j] = '1';
-                       c2BlueBinary = new String(c2Array);
-                   }
-                   else if(temp == 1 && c1BlueBinary.charAt(j) == '1')
-                   {
-                       char[] c1Array = c1BlueBinary.toCharArray();
-                       c1Array[j] = '0';
-                       c1BlueBinary = new String(c1Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1BlueBinary.toCharArray();
-                       c1Array[j] = '1';
-                       c1BlueBinary = new String(c1Array);
-                   }
+               if(temp == 0 && c2BlueBinary.charAt(j) == '1')
+               {
+                  char[] c2Array = c2BlueBinary.toCharArray();
+                  c2Array[j] = '0';
+                  c2BlueBinary = new String(c2Array);
+               }
+               else if(temp == 0 && c2BlueBinary.charAt(j) == '0')
+               {
+                  char[] c2Array = c2BlueBinary.toCharArray();
+                  c2Array[j] = '1';
+                  c2BlueBinary = new String(c2Array);
+               }
+               else if(temp == 1 && c1BlueBinary.charAt(j) == '1')
+               {
+                  char[] c1Array = c1BlueBinary.toCharArray();
+                  c1Array[j] = '0';
+                  c1BlueBinary = new String(c1Array);
                }
                else
                {
-                   Random rand = new Random();
-                   int temp = rand.nextInt(20) % 2;
+                  char[] c1Array = c1BlueBinary.toCharArray();
+                  c1Array[j] = '1';
+                  c1BlueBinary = new String(c1Array);
+               }
+            }
+            else
+            {
+               Random rand = new Random();
+               int temp = rand.nextInt(20) % 2;
                    /*
                    if temp == 0 then c2 bit is set to c1 bit
                    if temp == 1 then c1 bit is set to c2 bit
                    */
-                   if(temp == 0)
-                   {
-                       char[] c2Array = c2BlueBinary.toCharArray();
-                       c2Array[j] = c1BlueBinary.charAt(j);
-                       c2BlueBinary = new String(c2Array);
-                   }
-                   else
-                   {
-                       char[] c1Array = c1BlueBinary.toCharArray();
-                       c1Array[j] = c2BlueBinary.charAt(j);
-                       c1BlueBinary = new String(c1Array);
-                   }
+               if(temp == 0)
+               {
+                  char[] c2Array = c2BlueBinary.toCharArray();
+                  c2Array[j] = c1BlueBinary.charAt(j);
+                  c2BlueBinary = new String(c2Array);
                }
-           }
+               else
+               {
+                  char[] c1Array = c1BlueBinary.toCharArray();
+                  c1Array[j] = c2BlueBinary.charAt(j);
+                  c1BlueBinary = new String(c1Array);
+               }
+            }
+         }
            
-           int row = i / imgWidth;
-           int column = i % imgWidth;
+         int row = i / imgWidth;
+         int column = i % imgWidth;
            
            /*
            //Test for lightening
            */
-           Collections.shuffle(colorOrder);
+         Collections.shuffle(colorOrder);
            
-           if(colorOrder.get(0).equals("red"))
-           {
-               encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
+         if(colorOrder.get(0).equals("red"))
+         {
+            encoded1[2*row][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(0).equals("green"))
-           {
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
+            encoded2[2*row][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(0).equals("green"))
+         {
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(0).equals("blue"))
-           {
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column] += (Integer.parseInt(c1BlueBinary, 2));
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(0).equals("blue"))
+         {
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row][2*column] += (Integer.parseInt(c1BlueBinary, 2));
                
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row][2*column] = cover1[row][column];
-               encoded2[2*row][2*column] = cover2[row][column];
-           }
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row][2*column] += (Integer.parseInt(c2BlueBinary, 2));
+         }
+         else
+         {
+            encoded1[2*row][2*column] = cover1[row][column];
+            encoded2[2*row][2*column] = cover2[row][column];
+         }
            
-           if(colorOrder.get(1).equals("red"))
-           {
-               encoded1[2*row][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+         if(colorOrder.get(1).equals("red"))
+         {
+            encoded1[2*row][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(1).equals("green"))
-           {
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+            encoded2[2*row][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(1).equals("green"))
+         {
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(1).equals("blue"))
-           {
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(1).equals("blue"))
+         {
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
                
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row][2*column + 1] = cover1[row][column];
-               encoded2[2*row][2*column + 1] = cover2[row][column];
-           }
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
+         }
+         else
+         {
+            encoded1[2*row][2*column + 1] = cover1[row][column];
+            encoded2[2*row][2*column + 1] = cover2[row][column];
+         }
            
-           if(colorOrder.get(2).equals("red"))
-           {
-               encoded1[2*row + 1][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
+         if(colorOrder.get(2).equals("red"))
+         {
+            encoded1[2*row + 1][2*column] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row + 1][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(2).equals("green"))
-           {
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
+            encoded2[2*row + 1][2*column] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(2).equals("green"))
+         {
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row + 1][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(2).equals("blue"))
-           {
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column] += (Integer.parseInt(c1BlueBinary, 2));
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row + 1][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(2).equals("blue"))
+         {
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row + 1][2*column] += (Integer.parseInt(c1BlueBinary, 2));
                
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row + 1][2*column] = cover1[row][column];
-               encoded2[2*row + 1][2*column] = cover2[row][column];
-           }
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row + 1][2*column] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row + 1][2*column] += (Integer.parseInt(c2BlueBinary, 2));
+         }
+         else
+         {
+            encoded1[2*row + 1][2*column] = cover1[row][column];
+            encoded2[2*row + 1][2*column] = cover2[row][column];
+         }
            
-           if(colorOrder.get(3).equals("red"))
-           {
-               encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
+         if(colorOrder.get(3).equals("red"))
+         {
+            encoded1[2*row + 1][2*column + 1] = (Integer.parseInt(c1RedBinary, 2)) << 16; 
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(3).equals("green"))
-           {
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
+            encoded2[2*row + 1][2*column + 1] = (Integer.parseInt(c2RedBinary, 2)) << 16; 
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(3).equals("green"))
+         {
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
                
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
-           }
-           else if(colorOrder.get(3).equals("blue"))
-           {
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2));
+         }
+         else if(colorOrder.get(3).equals("blue"))
+         {
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
                
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
-               encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
-           }
-           else
-           {
-               encoded1[2*row + 1][2*column + 1] = cover1[row][column];
-               encoded2[2*row + 1][2*column + 1] = cover2[row][column];
-           }
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 16;
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("10000000", 2)) << 8;
+            encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
+         }
+         else
+         {
+            encoded1[2*row + 1][2*column + 1] = cover1[row][column];
+            encoded2[2*row + 1][2*column + 1] = cover2[row][column];
+         }
            //*/
-       }
+      }
        
-       n = 0;
-       imgHeight *= 2;
-       imgWidth *= 2;
-       encryptedShareRGB = new int[2][imgHeight * imgWidth];
-       for(int k = 0; k < imgHeight; k++)
-       {
-            for(int j = 0; j < imgWidth; j++)
-            {
-                   encryptedShareRGB[0][n] = encoded1[k][j];
-                   encryptedShareRGB[1][n] = encoded2[k][j];
-                   n += 1;
-            }
-        }
+      n = 0;
+      imgHeight *= 2;
+      imgWidth *= 2;
+      encryptedShareRGB = new int[2][imgHeight * imgWidth];
+      for(int k = 0; k < imgHeight; k++)
+      {
+         for(int j = 0; j < imgWidth; j++)
+         {
+            encryptedShareRGB[0][n] = encoded1[k][j];
+            encryptedShareRGB[1][n] = encoded2[k][j];
+            n += 1;
+         }
+      }
    }
-   
+      
    /**
    * Method TBD.
    * Want to focus on decrypting images and not worrying about if this would
    * work on transparencies.
    */
    public void decryptImage()
+   {
+      //Make a 2d array of pixel arrays
+      int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
+      
+      //getRGB pixels of BufferedImages
+      for(int i = 0; i < numSharesToDecrypt; i++)
+      {
+         sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, embeddedPixels[i], 0, imgWidth);
+      }
+      
+      secretMsgPixels = new int[(imgWidth / 2) * (imgHeight / 2)];
+      int[][] secretImg = new int[imgHeight / 2][imgWidth / 2];
+      int[][] encoded1 = new int[imgHeight][imgWidth];
+      int[][] encoded2 = new int[imgHeight][imgWidth];
+       
+      int n = 0;
+      for(int i = 0; i < imgHeight; i++)
+      {
+         for(int j = 0; j < imgWidth; j++)
+         {
+            encoded1[i][j] = embeddedPixels[0][n];
+            encoded2[i][j] = embeddedPixels[1][n];
+            n++;
+         }
+      }
+      
+      imgHeight = imgHeight / 2;
+      imgWidth = imgWidth / 2;
+      for(int r = 0; r < imgHeight; r++)
+      {
+         for(int c = 0; c < imgWidth; c++)
+         {
+            int redConcentration = 0;
+            int greenConcentration = 0;
+            int blueConcentration = 0;
+            
+            int[] red1 = new int[4];
+            int[] green1 = new int[4];
+            int[] blue1 = new int[4];
+            
+            int[] red2 = new int[4];
+            int[] green2 = new int[4];
+            int[] blue2 = new int[4];
+              
+            red1[0] = (encoded1[2 * r][2 * c] & 0x00ff0000) >> 16;
+            red1[1] = (encoded1[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
+            red1[2] = (encoded1[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
+            red1[3] = (encoded1[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
+              
+            red2[0] = (encoded2[2 * r][2 * c] & 0x00ff0000) >> 16;
+            red2[1] = (encoded2[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
+            red2[2] = (encoded2[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
+            red2[3] = (encoded2[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
+              
+            green1[0] = (encoded1[2 * r][2 * c] & 0x0000ff00) >> 8;
+            green1[1] = (encoded1[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
+            green1[2] = (encoded1[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
+            green1[3] = (encoded1[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
+              
+            green2[0] = (encoded2[2 * r][2 * c] & 0x0000ff00) >> 8;
+            green2[1] = (encoded2[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
+            green2[2] = (encoded2[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
+            green2[3] = (encoded2[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
+              
+            blue1[0] = (encoded1[2 * r][2 * c] & 0x000000ff);
+            blue1[1] = (encoded1[2 * r][2 * c + 1] & 0x000000ff);
+            blue1[2] = (encoded1[2 * r + 1][2 * c] & 0x000000ff);
+            blue1[3] = (encoded1[2 * r + 1][2 * c + 1] & 0x000000ff);
+              
+            blue2[0] = (encoded2[2 * r][2 * c] & 0x000000ff);
+            blue2[1] = (encoded2[2 * r][2 * c + 1] & 0x000000ff);
+            blue2[2] = (encoded2[2 * r + 1][2 * c] & 0x000000ff);
+            blue2[3] = (encoded2[2 * r + 1][2 * c + 1] & 0x000000ff);
+            
+            for(int i = 0; i < 4; i++)
+            {
+                if(green1[i] == 128 && blue1[i] == 128)
+                {
+                    //redConcentration = (red1[i] + red2[i]) / 2;
+                    //redConcentration = (red1[i] ^ red2[i]);
+                    String e1Red = String.format("%8s", Integer.toBinaryString(red1[i])).replace(" ", "0");
+                    String e2Red = String.format("%8s", Integer.toBinaryString(red2[i])).replace(" ", "0");
+                    String srRed = "00000000";
+                    
+                    for(int j = 0; j < srRed.length(); j++)
+                    {
+                        if(e1Red.charAt(j) != e2Red.charAt(j))
+                        {
+                            char[] srTemp = srRed.toCharArray();
+                            srTemp[j] = '1';
+                            srRed = new String(srTemp);
+                        }
+                        else
+                        {
+                            Random rand = new Random();
+                            int temp = rand.nextInt(20) % 2;
+                            
+                            char[] srTemp = srRed.toCharArray();
+                            
+                            if(temp == 0)
+                                srTemp[j] = '0';
+                            else
+                                srTemp[j] = '1';
+                    
+                            srRed = new String(srTemp);
+                        }
+                    }
+                    
+                    redConcentration = Integer.parseInt(srRed, 2);
+                }
+                else if(red1[i] == 128 && blue1[i] == 128)
+                {
+                    //greenConcentration = (green1[i] + green2[i]) / 2;
+                    //greenConcentration = (green1[i] ^ green2[i]);
+                    String e1Green = String.format("%8s", Integer.toBinaryString(green1[i])).replace(" ", "0");
+                    String e2Green = String.format("%8s", Integer.toBinaryString(green2[i])).replace(" ", "0");
+                    String srGreen = "00000000";
+                    
+                    for(int j = 0; j < srGreen.length(); j++)
+                    {
+                        if(e1Green.charAt(j) != e2Green.charAt(j))
+                        {
+                            char[] srTemp = srGreen.toCharArray();
+                            srTemp[j] = '1';
+                            srGreen = new String(srTemp);
+                        }
+                        else
+                        {
+                            Random rand = new Random();
+                            int temp = rand.nextInt(20) % 2;
+                            
+                            char[] srTemp = srGreen.toCharArray();
+                            
+                            if(temp == 0)
+                                srTemp[j] = '0';
+                            else
+                                srTemp[j] = '1';
+                            
+                            srGreen = new String(srTemp);
+                        }
+                    }
+                    
+                    greenConcentration = Integer.parseInt(srGreen, 2);
+                }
+                else if(red1[i] == 128 && green1[i] == 128)
+                {
+                    //blueConcentration = (blue1[i] + blue2[i]) / 2;
+                    //blueConcentration = (blue1[i] ^ blue2[i]);
+                    String e1Blue = String.format("%8s", Integer.toBinaryString(blue1[i])).replace(" ", "0");
+                    String e2Blue = String.format("%8s", Integer.toBinaryString(blue2[i])).replace(" ", "0");
+                    String srBlue = "00000000";
+                    
+                    for(int j = 0; j < srBlue.length(); j++)
+                    {
+                        if(e1Blue.charAt(j) != e2Blue.charAt(j))
+                        {
+                            char[] srTemp = srBlue.toCharArray();
+                            srTemp[j] = '1';
+                            srBlue = new String(srTemp);
+                        }
+                        else
+                        {
+                            Random rand = new Random();
+                            int temp = rand.nextInt(20) % 2;
+                            
+                            char[] srTemp = srBlue.toCharArray();
+                            
+                            if(temp == 0)
+                                srTemp[j] = '0';
+                            else
+                                srTemp[j] = '1';
+                            
+                            srBlue = new String(srTemp);
+                        }
+                    }
+                    
+                    blueConcentration = Integer.parseInt(srBlue, 2);
+                }
+                else
+                {
+                    //do nothing because it is cover pixel
+                }
+            }
+             
+            Color decryptedColor = new Color(redConcentration, greenConcentration, blueConcentration);
+            secretImg[r][c] = decryptedColor.getRGB();
+         }
+      }
+      
+      int secretIndex = 0;
+      for(int i = 0; i < imgHeight; i++)
+      {
+         for(int j = 0; j < imgWidth; j++)
+         {
+            secretMsgPixels[secretIndex] = secretImg[i][j];
+            secretIndex += 1;
+         }
+      }
+      
+      errorDiffusion(secretMsgPixels);
+      
+   }
+   
+   /**
+   * Method decrypts two encoded images by XOR-ing the binary color values together.
+   * The XOR technique decrypts the encoded images as if they were printed on
+   * transparencies and physically stacked.
+   */
+   public void decryptImageTransparencyMethod()
    {
       //Make a 2d array of pixel arrays
       int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
@@ -748,100 +957,6 @@ public class ExtendedVCS
          Color decryptedColor = new Color(redVal, greenVal, blueVal);
          secretMsgPixels[i] = decryptedColor.getRGB();
       }
-   }
-      
-   /**
-   * Method decrypts two encoded images by XOR-ing the binary color values together.
-   * The XOR technique decrypts the encoded images as if they were printed on
-   * transparencies and physically stacked.
-   */
-   public void decryptImageTransparencyMethod()
-   {
-      
-      //Make a 2d array of pixel arrays
-      int[][] embeddedPixels = new int[numSharesToDecrypt][imgWidth * imgHeight];
-      
-      //getRGB pixels of BufferedImages
-      for(int i = 0; i < numSharesToDecrypt; i++)
-      {
-         sharesToDecrypt[i].getRGB(0, 0, imgWidth, imgHeight, embeddedPixels[i], 0, imgWidth);
-      }
-      
-      secretMsgPixels = new int[(imgWidth / 2) * (imgHeight / 2)];
-      int[][] secretImg = new int[imgHeight / 2][imgWidth / 2];
-      int[][] encoded1 = new int[imgHeight][imgWidth];
-      int[][] encoded2 = new int[imgHeight][imgWidth];
-       
-       int n = 0;
-       for(int i = 0; i < imgHeight; i++)
-       {
-           for(int j = 0; j < imgWidth; j++)
-           {
-               encoded1[i][j] = embeddedPixels[0][n];
-               encoded2[i][j] = embeddedPixels[1][n];
-               n++;
-           }
-       }
-      
-      imgHeight = imgHeight / 2;
-      imgWidth = imgWidth / 2;
-      for(int r = 0; r < imgHeight; r++)
-      {
-          for(int c = 0; c < imgWidth; c++)
-          {
-              int redConcentrationAvg = 0;
-              int greenConcentrationAvg = 0;
-              int blueConcentrationAvg = 0;
-              
-              redConcentrationAvg += (encoded1[2 * r][2 * c] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
-              
-              redConcentrationAvg += (encoded2[2 * r][2 * c] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x00ff0000) >> 16;
-              redConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x00ff0000) >> 16;
-              
-              greenConcentrationAvg += (encoded1[2 * r][2 * c] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
-              
-              greenConcentrationAvg += (encoded2[2 * r][2 * c] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x0000ff00) >> 8;
-              greenConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x0000ff00) >> 8;
-              
-              blueConcentrationAvg += (encoded1[2 * r][2 * c] & 0x000000ff);
-              blueConcentrationAvg += (encoded1[2 * r][2 * c + 1] & 0x000000ff);
-              blueConcentrationAvg += (encoded1[2 * r + 1][2 * c] & 0x000000ff);
-              blueConcentrationAvg += (encoded1[2 * r + 1][2 * c + 1] & 0x000000ff);
-              
-              blueConcentrationAvg += (encoded2[2 * r][2 * c] & 0x000000ff) >> 16;
-              blueConcentrationAvg += (encoded2[2 * r][2 * c + 1] & 0x000000ff) >> 16;
-              blueConcentrationAvg += (encoded2[2 * r + 1][2 * c] & 0x000000ff) >> 16;
-              blueConcentrationAvg += (encoded2[2 * r + 1][2 * c + 1] & 0x000000ff) >> 16;
-              
-              redConcentrationAvg /= 8;
-              greenConcentrationAvg /= 8;
-              blueConcentrationAvg /= 8;
-              
-              Color decryptedColor = new Color(redConcentrationAvg, greenConcentrationAvg, blueConcentrationAvg);
-              secretImg[r][c] = decryptedColor.getRGB();
-          }
-      }
-      
-      int secretIndex = 0;
-      for(int i = 0; i < imgHeight; i++)
-      {
-          for(int j = 0; j < imgWidth; j++)
-          {
-              secretMsgPixels[secretIndex] = secretImg[i][j];
-              secretIndex += 1;
-          }
-      }
-      
    }
 
 }
