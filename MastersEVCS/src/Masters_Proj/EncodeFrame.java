@@ -87,6 +87,7 @@ public class EncodeFrame extends javax.swing.JFrame {
         });
 
         encodeButton.setText("Encode");
+        encodeButton.setEnabled(validateEncodeButtonWithBrowse());
         encodeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 encodePressed(evt);
@@ -95,6 +96,12 @@ public class EncodeFrame extends javax.swing.JFrame {
 
         panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Secret Image"));
         panel1.setToolTipText("Secret Image");
+
+        secretTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                validateEncodeButton(evt);
+            }
+        });
 
         jLabel1.setText("Please select your secret image file:*");
 
@@ -133,10 +140,22 @@ public class EncodeFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Please select your two innocent image files:*");
 
+        innocentTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                validateEncodeButton(evt);
+            }
+        });
+
         browseButton2.setText("Browse");
         browseButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 imageBrowsePressed(evt);
+            }
+        });
+
+        innocentTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                validateEncodeButton(evt);
             }
         });
 
@@ -304,7 +323,7 @@ public class EncodeFrame extends javax.swing.JFrame {
                 directoryForStorage = dir.getAbsolutePath();
             }
         }
-        
+        encodeButton.setEnabled(validateEncodeButtonWithBrowse());
     }//GEN-LAST:event_dirBrowsePressed
 
     private void imageBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowsePressed
@@ -329,6 +348,7 @@ public class EncodeFrame extends javax.swing.JFrame {
                 innocentFiles[1] = imageFile.getAbsolutePath();
             }
         }
+        encodeButton.setEnabled(validateEncodeButtonWithBrowse());
     }//GEN-LAST:event_imageBrowsePressed
 
     private void encodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodePressed
@@ -430,12 +450,18 @@ public class EncodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_encodePressed
 
-    private boolean validateEncodeButton()
+    private void validateEncodeButton(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_validateEncodeButton
+        // TODO add your handling code here:
+        encodeButton.setEnabled(validateEncodeButtonWithBrowse());
+    }//GEN-LAST:event_validateEncodeButton
+
+    private boolean validateEncodeButtonWithBrowse()
     {
         return (!secretTextField.getText().isEmpty()
                 && !innocentTextField1.getText().isEmpty()
                 && !innocentTextField2.getText().isEmpty());
     }
+    
     /**
      * @param args the command line arguments
      */

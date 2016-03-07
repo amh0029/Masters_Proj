@@ -51,7 +51,7 @@ public class DecodeFrame extends javax.swing.JFrame {
         storageDirectoryTextField = new javax.swing.JTextField();
         browseButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        decodeButton = new javax.swing.JButton();
 
         imageChooser.setDialogTitle("Choose an Image");
         imageChooser.setFileFilter(new ImageCustomFilter());
@@ -66,10 +66,22 @@ public class DecodeFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Please select your two encoded image files:*");
 
+        encodedTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                validateDecodeButton(evt);
+            }
+        });
+
         browseButton1.setText("Browse");
         browseButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 imageBrowsePressed(evt);
+            }
+        });
+
+        encodedTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                validateDecodeButton(evt);
             }
         });
 
@@ -183,8 +195,9 @@ public class DecodeFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Decode");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        decodeButton.setText("Decode");
+        decodeButton.setEnabled(validateDecodeButtonWithBrowse());
+        decodeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 decodePressed(evt);
             }
@@ -201,7 +214,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
+                        .addComponent(decodeButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
@@ -216,7 +229,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(decodeButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -246,6 +259,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                 shareFiles[1] = imageFile.getAbsolutePath();
             }
         }
+        decodeButton.setEnabled(validateDecodeButtonWithBrowse());
     }//GEN-LAST:event_imageBrowsePressed
 
     private void directoryBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryBrowsePressed
@@ -331,6 +345,17 @@ public class DecodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_decodePressed
 
+    private void validateDecodeButton(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_validateDecodeButton
+        // TODO add your handling code here:
+        decodeButton.setEnabled(validateDecodeButtonWithBrowse());
+    }//GEN-LAST:event_validateDecodeButton
+                                    
+    private boolean validateDecodeButtonWithBrowse()
+    {
+        return (!encodedTextField1.getText().isEmpty()
+                && !encodedTextField2.getText().isEmpty());
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -373,12 +398,12 @@ public class DecodeFrame extends javax.swing.JFrame {
     private javax.swing.JButton browseButton1;
     private javax.swing.JButton browseButton2;
     private javax.swing.JButton browseButton3;
+    private javax.swing.JButton decodeButton;
     private javax.swing.JFileChooser directoryChooser;
     private javax.swing.JTextField encodedTextField1;
     private javax.swing.JTextField encodedTextField2;
     private javax.swing.JFileChooser imageChooser;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
