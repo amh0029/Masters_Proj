@@ -27,6 +27,10 @@ public class EncodeFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
     
+    /**
+     * Why is this here...
+     * @param prevState 
+     */
     public EncodeFrame(EncodeFrame prevState)
     {
         this.secretTextField.setText(prevState.secretTextField.getText());
@@ -426,6 +430,12 @@ public class EncodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_encodePressed
 
+    private boolean validateEncodeButton()
+    {
+        return (!secretTextField.getText().isEmpty()
+                && !innocentTextField1.getText().isEmpty()
+                && !innocentTextField2.getText().isEmpty());
+    }
     /**
      * @param args the command line arguments
      */
