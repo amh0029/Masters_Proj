@@ -397,10 +397,30 @@ public class EncodeFrame extends javax.swing.JFrame {
             
             if(storageDirectoryTextField.getText().equals(""))
             {
-                //Get path to users desktop
-                //BUG!!!  Not working.
-                directoryForStorage = "C:/Users/allisonholt/Desktop";
-                //makeDir = false;
+                //Find OS first
+                String os = System.getProperty("os.name");
+                if(os.contains("Windows"))
+                {
+                    //Tested on jGRASP lab computer
+                    String userPathToDesktop = System.getProperty("user.home");
+                    userPathToDesktop = userPathToDesktop.replace('\\','/');
+                    directoryForStorage = userPathToDesktop + "/Desktop";
+                    
+                }
+                else if(os.contains("Mac"))
+                {
+                    String userPathToDesktop = System.getProperty("user.home");
+                    //user.home returns "/Users/allisonholt"
+                    directoryForStorage = userPathToDesktop + "/Desktop";
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Please use the browse button to specify\n"
+                            + "where your secret shares will be placed.\nThe program cannot find "
+                            + "your desktop.",
+                    "WARNING", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
             }
             
             String[] shareFiles = new String[2];
