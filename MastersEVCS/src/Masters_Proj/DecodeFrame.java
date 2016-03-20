@@ -331,16 +331,17 @@ public class DecodeFrame extends javax.swing.JFrame {
             }
             
             String decodedFileName;
+            String secretFile, directory;
+            directory = directoryForStorage;
             if(stackedTextField.getText().equals(""))
             {
-                //Get path to users desktop
-                //BUG!!!  Not working.
                 decodedFileName = directoryForStorage + "/secretMsg.png";
-                //makeDir = false;
+                secretFile = "secretMsg.png";
             }
             else
             {
                 decodedFileName = directoryForStorage + "/" + stackedTextField.getText() + ".png";
+                secretFile = stackedTextField.getText() + ".png";
             }
             
             try
@@ -353,7 +354,8 @@ public class DecodeFrame extends javax.swing.JFrame {
                 
                 new MainFrame().setVisible(true);
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Your decrypted image has been created.",
+                JOptionPane.showMessageDialog(null, "Your decrypted image (" + secretFile
+                    + " has been created and stored in " + directory + ".",
                     "SUCCESS", JOptionPane.PLAIN_MESSAGE);
             }
             catch(IOException e)

@@ -424,23 +424,29 @@ public class EncodeFrame extends javax.swing.JFrame {
             }
             
             String[] shareFiles = new String[2];
+            String firstFile, secondFile, directory;
+            directory = directoryForStorage;
             
             if(filename1.getText().equals(""))
             {
                 shareFiles[0] = directoryForStorage + "/share1.png";
+                firstFile = "share1.png";
             }
             else
             {
                 shareFiles[0] = directoryForStorage + "/" + filename1.getText() +".png";
+                firstFile = filename1.getText() + ".png";
             }
                 
             if(filename2.getText().equals(""))
             {
                 shareFiles[1] = directoryForStorage + "/share2.png";
+                secondFile = "share2.png";
             }
             else
             {
                 shareFiles[1] = directoryForStorage + "/" + filename2.getText() +".png";
+                secondFile = filename2.getText() + ".png";
             }
             
             
@@ -459,7 +465,9 @@ public class EncodeFrame extends javax.swing.JFrame {
                     
                 new MainFrame().setVisible(true);
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Your encrypted shares have been created.",
+                JOptionPane.showMessageDialog(null, "Your encrypted shares(" + firstFile
+                    + " and " + secondFile + ") have been created and stored in "
+                    + directory + ".",
                     "SUCCESS", JOptionPane.PLAIN_MESSAGE);
             }
             catch (IOException e)
