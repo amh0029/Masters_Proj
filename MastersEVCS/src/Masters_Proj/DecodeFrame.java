@@ -355,7 +355,7 @@ public class DecodeFrame extends javax.swing.JFrame {
                 new MainFrame().setVisible(true);
                 this.setVisible(false);
                 JOptionPane.showMessageDialog(null, "Your decrypted image (" + secretFile
-                    + " has been created and stored in " + directory + ".",
+                    + ") has been created and stored in\n" + directory + ".",
                     "SUCCESS", JOptionPane.PLAIN_MESSAGE);
             }
             catch(IOException e)
