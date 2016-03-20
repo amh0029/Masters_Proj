@@ -561,36 +561,36 @@ public class ExtendedVCS
            
          if(colorOrder.get(0).equals("red"))
          {
-            encoded1[2*row][2*column] = (c1RedAlpha) << 24;
+            encoded1[2*row][2*column] = (255 - c1RedAlpha) << 24;
             encoded1[2*row][2*column] += (Integer.parseInt(c1RedBinary, 2)) << 16; 
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row][2*column] = (c2RedAlpha) << 24;
+            encoded2[2*row][2*column] = (255 - c2RedAlpha) << 24;
             encoded2[2*row][2*column] += (Integer.parseInt(c2RedBinary, 2)) << 16; 
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(0).equals("green"))
          {
-            encoded1[2*row][2*column] = (c1GreenAlpha) << 24;
+            encoded1[2*row][2*column] = (255 - c1GreenAlpha) << 24;
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row][2*column] = (c2GreenAlpha) << 24;
+            encoded2[2*row][2*column] = (255 - c2GreenAlpha) << 24;
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(0).equals("blue"))
          {
-            encoded1[2*row][2*column] = (c1BlueAlpha) << 24;
+            encoded1[2*row][2*column] = (255 - c1BlueAlpha) << 24;
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row][2*column] += (Integer.parseInt(c1BlueBinary, 2));
                
-            encoded2[2*row][2*column] = (c2BlueAlpha) << 24;
+            encoded2[2*row][2*column] = (255 - c2BlueAlpha) << 24;
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row][2*column] += (Integer.parseInt(c2BlueBinary, 2));
@@ -606,36 +606,36 @@ public class ExtendedVCS
            
          if(colorOrder.get(1).equals("red"))
          {
-            encoded1[2*row][2*column + 1] = (c1RedAlpha) << 24;
+            encoded1[2*row][2*column + 1] = (255 - c1RedAlpha) << 24;
             encoded1[2*row][2*column + 1] += (Integer.parseInt(c1RedBinary, 2)) << 16; 
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row][2*column + 1] = (c2RedAlpha) << 24;
+            encoded2[2*row][2*column + 1] = (255 - c2RedAlpha) << 24;
             encoded2[2*row][2*column + 1] += (Integer.parseInt(c2RedBinary, 2)) << 16; 
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(1).equals("green"))
          {
-            encoded1[2*row][2*column + 1] = (c1GreenAlpha) << 24;
+            encoded1[2*row][2*column + 1] = (255 - c1GreenAlpha) << 24;
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row][2*column + 1] = (c2GreenAlpha) << 24;
+            encoded2[2*row][2*column + 1] = (255 - c2GreenAlpha) << 24;
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(1).equals("blue"))
          {
-            encoded1[2*row][2*column + 1] = (c1BlueAlpha) << 24;
+            encoded1[2*row][2*column + 1] = (255 - c1BlueAlpha) << 24;
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
             
-            encoded2[2*row][2*column + 1] = (c2BlueAlpha) << 24;
+            encoded2[2*row][2*column + 1] = (255 - c2BlueAlpha) << 24;
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
@@ -651,36 +651,36 @@ public class ExtendedVCS
            
          if(colorOrder.get(2).equals("red"))
          {
-            encoded1[2*row + 1][2*column] = (c1RedAlpha) << 24;
+            encoded1[2*row + 1][2*column] = (255 - c1RedAlpha) << 24;
             encoded1[2*row + 1][2*column] += (Integer.parseInt(c1RedBinary, 2)) << 16; 
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row + 1][2*column] = (c2RedAlpha) << 24;
+            encoded2[2*row + 1][2*column] = (255 - c2RedAlpha) << 24;
             encoded2[2*row + 1][2*column] += (Integer.parseInt(c2RedBinary, 2)) << 16; 
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(2).equals("green"))
          {
-            encoded1[2*row + 1][2*column] = (c1GreenAlpha) << 24;
+            encoded1[2*row + 1][2*column] = (255 - c1GreenAlpha) << 24;
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row + 1][2*column] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row + 1][2*column] = (c2GreenAlpha) << 24;
+            encoded2[2*row + 1][2*column] = (255 - c2GreenAlpha) << 24;
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row + 1][2*column] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(2).equals("blue"))
          {
-            encoded1[2*row + 1][2*column] = (c1BlueAlpha) << 24;
+            encoded1[2*row + 1][2*column] = (255 - c1BlueAlpha) << 24;
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row + 1][2*column] += (Integer.parseInt(c1BlueBinary, 2));
             
-            encoded2[2*row + 1][2*column] = (c2BlueAlpha) << 24;
+            encoded2[2*row + 1][2*column] = (255 - c2BlueAlpha) << 24;
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row + 1][2*column] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row + 1][2*column] += (Integer.parseInt(c2BlueBinary, 2));
@@ -696,36 +696,36 @@ public class ExtendedVCS
            
          if(colorOrder.get(3).equals("red"))
          {
-            encoded1[2*row + 1][2*column + 1] = (c1RedAlpha) << 24; 
+            encoded1[2*row + 1][2*column + 1] = (255 - c1RedAlpha) << 24; 
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1RedBinary, 2)) << 16; 
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row + 1][2*column + 1] = (c2RedAlpha) << 24;
+            encoded2[2*row + 1][2*column + 1] = (255 - c2RedAlpha) << 24;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2RedBinary, 2)) << 16; 
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(3).equals("green"))
          {
-            encoded1[2*row + 1][2*column + 1] = (c1GreenAlpha) << 24;
+            encoded1[2*row + 1][2*column + 1] = (255 - c1GreenAlpha) << 24;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1GreenBinary, 2)) << 8;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2));
             
-            encoded2[2*row + 1][2*column + 1] = (c2GreenAlpha) << 24;
+            encoded2[2*row + 1][2*column + 1] = (255 - c2GreenAlpha) << 24;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2GreenBinary, 2)) << 8;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2));
          }
          else if(colorOrder.get(3).equals("blue"))
          {
-            encoded1[2*row + 1][2*column + 1] = (c1BlueAlpha) << 24;
+            encoded1[2*row + 1][2*column + 1] = (255 - c1BlueAlpha) << 24;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded1[2*row + 1][2*column + 1] += (Integer.parseInt(c1BlueBinary, 2));
             
-            encoded2[2*row + 1][2*column + 1] = (c2BlueAlpha) << 24;
+            encoded2[2*row + 1][2*column + 1] = (255 - c2BlueAlpha) << 24;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 16;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt("01111111", 2)) << 8;
             encoded2[2*row + 1][2*column + 1] += (Integer.parseInt(c2BlueBinary, 2));
