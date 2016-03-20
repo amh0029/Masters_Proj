@@ -345,7 +345,7 @@ public class DecodeFrame extends javax.swing.JFrame {
             
             try
             {
-                BufferedImage decryptImage = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
+                BufferedImage decryptImage = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_RGB);
                 decryptImage.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), myEVCS.getDecryptImgPixels(), 0, myEVCS.getImgWidth());
                 
                 File tempOutput = new File(decodedFileName);

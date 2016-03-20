@@ -446,12 +446,13 @@ public class EncodeFrame extends javax.swing.JFrame {
             
             try
             {
-                BufferedImage tempShare1 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_RGB);
+                //Changed BufferedImage.TYPE_INT_RGB to BufferedImage.TYPE_INT_ARGB
+                BufferedImage tempShare1 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
                 tempShare1.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), encodedRGB[0], 0, myEVCS.getImgWidth());
                 File tempOutput1 = new File(shareFiles[0]);
                 ImageIO.write(tempShare1, "png", tempOutput1);
                     
-                BufferedImage tempShare2 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_RGB);
+                BufferedImage tempShare2 = new BufferedImage(myEVCS.getImgWidth(), myEVCS.getImgHeight(), BufferedImage.TYPE_INT_ARGB);
                 tempShare2.setRGB(0, 0, myEVCS.getImgWidth(), myEVCS.getImgHeight(), encodedRGB[1], 0, myEVCS.getImgWidth());
                 File tempOutput2 = new File(shareFiles[1]);
                 ImageIO.write(tempShare2, "png", tempOutput2);
