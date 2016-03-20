@@ -597,8 +597,11 @@ public class ExtendedVCS
          }
          else
          {
-            encoded1[2*row][2*column] = cover1[row][column];
-            encoded2[2*row][2*column] = cover2[row][column];
+            encoded1[2*row][2*column] = 255 << 24;
+            encoded1[2*row][2*column] += cover1[row][column];
+            
+            encoded2[2*row][2*column] = 255 << 24;
+            encoded2[2*row][2*column] += cover2[row][column];
          }
            
          if(colorOrder.get(1).equals("red"))
@@ -639,8 +642,11 @@ public class ExtendedVCS
          }
          else
          {
-            encoded1[2*row][2*column + 1] = cover1[row][column];
-            encoded2[2*row][2*column + 1] = cover2[row][column];
+            encoded1[2*row][2*column + 1] = 255 << 24;
+            encoded1[2*row][2*column + 1] += cover1[row][column];
+            
+            encoded2[2*row][2*column + 1] = 255 << 24;
+            encoded2[2*row][2*column + 1] += cover2[row][column];
          }
            
          if(colorOrder.get(2).equals("red"))
@@ -681,8 +687,11 @@ public class ExtendedVCS
          }
          else
          {
-            encoded1[2*row + 1][2*column] = cover1[row][column];
-            encoded2[2*row + 1][2*column] = cover2[row][column];
+            encoded1[2*row + 1][2*column] = 255 << 24;
+            encoded1[2*row + 1][2*column] += cover1[row][column];
+            
+            encoded1[2*row + 1][2*column] = 255 << 24;
+            encoded2[2*row + 1][2*column] += cover2[row][column];
          }
            
          if(colorOrder.get(3).equals("red"))
@@ -723,10 +732,13 @@ public class ExtendedVCS
          }
          else
          {
-            encoded1[2*row + 1][2*column + 1] = cover1[row][column];
-            encoded2[2*row + 1][2*column + 1] = cover2[row][column];
+            encoded1[2*row + 1][2*column + 1] = 255 << 24;
+            encoded1[2*row + 1][2*column + 1] += cover1[row][column];
+            
+            encoded2[2*row + 1][2*column + 1] = 255 << 24;
+            encoded2[2*row + 1][2*column + 1] += cover2[row][column];
          }
-           //*/
+           
       }
        
       n = 0;
