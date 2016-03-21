@@ -553,11 +553,34 @@ public class ExtendedVCS
          Collections.shuffle(colorOrder);
          
          int c1RedAlpha = Math.abs(c1OrigRed - Integer.parseInt(c1RedBinary, 2));
+         c1RedAlpha += Math.abs(c1OrigGreen - 127);
+         c1RedAlpha += Math.abs(c1OrigBlue - 127);
+         c1RedAlpha /= 3;
+         
          int c2RedAlpha = Math.abs(c2OrigRed - Integer.parseInt(c2RedBinary, 2));
+         c2RedAlpha += Math.abs(c2OrigGreen - 127);
+         c2RedAlpha += Math.abs(c2OrigBlue - 127);
+         c2RedAlpha /= 3;
+         
          int c1GreenAlpha = Math.abs(c1OrigGreen - Integer.parseInt(c1GreenBinary, 2));
+         c1GreenAlpha += Math.abs(c1OrigRed - 127);
+         c1GreenAlpha += Math.abs(c1OrigBlue - 127);
+         c1GreenAlpha /= 3;
+         
          int c2GreenAlpha = Math.abs(c2OrigGreen - Integer.parseInt(c2GreenBinary, 2));
+         c2GreenAlpha += Math.abs(c2OrigRed - 127);
+         c2GreenAlpha += Math.abs(c2OrigBlue - 127);
+         c2GreenAlpha /= 3;
+         
          int c1BlueAlpha = Math.abs(c1OrigBlue - Integer.parseInt(c1BlueBinary, 2));
+         c1BlueAlpha += Math.abs(c1OrigGreen - 127);
+         c1BlueAlpha += Math.abs(c1OrigRed - 127);
+         c1BlueAlpha /= 3;
+         
          int c2BlueAlpha = Math.abs(c2OrigBlue - Integer.parseInt(c2BlueBinary, 2));
+         c2BlueAlpha += Math.abs(c2OrigGreen - 127);
+         c2BlueAlpha += Math.abs(c2OrigRed - 127);
+         c2BlueAlpha /= 3;
            
          if(colorOrder.get(0).equals("red"))
          {
