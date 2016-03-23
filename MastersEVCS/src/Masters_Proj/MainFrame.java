@@ -1,19 +1,23 @@
-package Masters_Proj;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
+package Masters_Proj;
+
 /**
- *
+ * The MainFrame is the first window users see of the Holt Visual Cryptography
+ * Tool.  It explains how the tool works and lets the users choose if they wish
+ * to encrypt/encode or decrypt/decode.
+ * 
  * @author allisonholt
+ * @version 03-23-2016
  */
 public class MainFrame extends javax.swing.JFrame {
 
     /**
-     * Creates new form StartFrame
+     * Creates new form MainFrame which is the first frame of the program.
      */
     public MainFrame() {
         initComponents();
@@ -110,6 +114,11 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Displays the EncodeFrame when the user hits the encode button.
+     * 
+     * @param evt Event of the user hitting the encode button
+     */
     private void encodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodePressed
         // TODO add your handling code here:
         new EncodeFrame().setVisible(true);
@@ -117,6 +126,11 @@ public class MainFrame extends javax.swing.JFrame {
         
     }//GEN-LAST:event_encodePressed
 
+    /**
+     * Displays the DecodeFrame when the user hits the decode button.
+     * 
+     * @param evt Event of the user hitting the decode button
+     */
     private void decodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodePressed
         // TODO add your handling code here:
         new DecodeFrame().setVisible(true);
@@ -124,6 +138,8 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_decodePressed
 
     /**
+     * Main method for the Holt Visual Cryptography Tool.
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {

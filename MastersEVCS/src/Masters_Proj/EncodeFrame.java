@@ -1,3 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package Masters_Proj;
 
 import java.awt.image.BufferedImage;
@@ -7,33 +13,22 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
+ * The EncodeFrame has the user pick the secret image and the two innocent images
+ * to be encoded.  The user also has the option to specify the encoded share names
+ * and where the encoded images get stored.
+ * 
  * @author allisonholt
+ * @version 03-23-2016
  */
 public class EncodeFrame extends javax.swing.JFrame {
 
     /**
-     * Creates new form EncodeFrame
+     * Creates new form EncodeFrame.
      */
     public EncodeFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
-    }
-    
-    /**
-     * Why is this here...
-     * @param prevState 
-     */
-    public EncodeFrame(EncodeFrame prevState)
-    {
-        this.secretTextField.setText(prevState.secretTextField.getText());
     }
 
     /**
@@ -305,12 +300,24 @@ public class EncodeFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Returns the user to the MainFrame when cancel button is pressed.
+     * 
+     * @param evt Event of the user hitting the cancel button
+     */
     private void cancelPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelPressed
         // TODO add your handling code here:
         this.setVisible(false);
         new MainFrame().setVisible(true);
     }//GEN-LAST:event_cancelPressed
 
+    /**
+     * Opens a file chooser to allow the user to select the directory to store
+     * the encoded images.
+     * 
+     * @param evt Event of the user hitting the browse button for selecting a 
+     * directory
+     */
     private void dirBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dirBrowsePressed
         
         int returnVal = directoryChooser.showOpenDialog(this);
@@ -326,6 +333,13 @@ public class EncodeFrame extends javax.swing.JFrame {
         encodeButton.setEnabled(validateEncodeButtonWithBrowse());
     }//GEN-LAST:event_dirBrowsePressed
 
+    /**
+     * Opens a file chooser to allow the user to select images (for the secret 
+     * image and the two innocent images).
+     * 
+     * @param evt Event of the user hitting the browse button to select the images
+     * to be used for the encryption process
+     */
     private void imageBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowsePressed
         
         int returnVal = imageChooser.showOpenDialog(this);
@@ -351,6 +365,12 @@ public class EncodeFrame extends javax.swing.JFrame {
         encodeButton.setEnabled(validateEncodeButtonWithBrowse());
     }//GEN-LAST:event_imageBrowsePressed
 
+    /**
+     * Encrypts the secret image into the two innocent images when the user hits
+     * the encode button.
+     * 
+     * @param evt Event of the user hitting the encode button
+     */
     private void encodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encodePressed
         //Code to encode secret message
         BufferedImage secretImage = null;
@@ -479,11 +499,23 @@ public class EncodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_encodePressed
 
+    /**
+     * Keeps the encode button disabled until all of the required information
+     * has been entered by the user.
+     * 
+     * @param evt Event of the user typing in the required text fields
+     */
     private void validateEncodeButton(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_validateEncodeButton
         // TODO add your handling code here:
         encodeButton.setEnabled(validateEncodeButtonWithBrowse());
     }//GEN-LAST:event_validateEncodeButton
-
+    
+    /**
+     * Checks that all of the required fields have been entered in order for
+     * encryption to be performed.
+     * 
+     * @return True if all the required fields have entries, false otherwise
+     */
     private boolean validateEncodeButtonWithBrowse()
     {
         return (!secretTextField.getText().isEmpty()
@@ -492,6 +524,9 @@ public class EncodeFrame extends javax.swing.JFrame {
     }
     
     /**
+     * The main method for the encryption portion of the Holt Visual Cryptography
+     * Tool.
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {

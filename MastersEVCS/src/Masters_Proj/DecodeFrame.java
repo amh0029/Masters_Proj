@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Masters_Proj;
 
 import java.awt.image.BufferedImage;
@@ -13,13 +14,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
- *
+ *The DecodeFrame has the user pick the two encoded images to be decoded.
+ * The user also has the option to specify the decrypted image's name
+ * and where the decoded image get stored.
+ * 
  * @author allisonholt
+ * @version 03-23-2016
  */
 public class DecodeFrame extends javax.swing.JFrame {
 
     /**
-     * Creates new form DecodeFrame
+     * Creates new form DecodeFrame.
      */
     public DecodeFrame() {
         initComponents();
@@ -236,12 +241,24 @@ public class DecodeFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Returns the user to the MainFrame when cancel button is pressed.
+     * 
+     * @param evt Event of the user hitting the cancel button
+     */
     private void cancelPressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelPressed
         // TODO add your handling code here:
         this.setVisible(false);
         new MainFrame().setVisible(true);
     }//GEN-LAST:event_cancelPressed
 
+    /**
+     * Opens a file chooser to allow the user to select images (for the two 
+     * encoded images).
+     * 
+     * @param evt Event of the user hitting the browse button to select the images
+     * to be used for the decryption process
+     */
     private void imageBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imageBrowsePressed
         // TODO add your handling code here:
         int returnVal = imageChooser.showOpenDialog(this);
@@ -262,6 +279,13 @@ public class DecodeFrame extends javax.swing.JFrame {
         decodeButton.setEnabled(validateDecodeButtonWithBrowse());
     }//GEN-LAST:event_imageBrowsePressed
 
+    /**
+     * Opens a file chooser to allow the user to select the directory to store
+     * the decoded image.
+     * 
+     * @param evt Event of the user hitting the browse button for selecting a 
+     * directory
+     */
     private void directoryBrowsePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_directoryBrowsePressed
         // TODO add your handling code here:
         int returnVal = directoryChooser.showOpenDialog(this);
@@ -276,6 +300,12 @@ public class DecodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_directoryBrowsePressed
 
+    /**
+     * Decrypts the two encoded images into a single image that reveals the 
+     * secret message when the user hits the decode button.
+     * 
+     * @param evt Event of the user hitting the decode button
+     */
     private void decodePressed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decodePressed
         // TODO add your handling code here:
         BufferedImage[] sharesEVCS = new BufferedImage[2];
@@ -367,11 +397,23 @@ public class DecodeFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_decodePressed
 
+    /**
+     * Keeps the decode button disabled until all of the required information
+     * has been entered by the user.
+     * 
+     * @param evt Event of the user typing in the required text fields
+     */
     private void validateDecodeButton(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_validateDecodeButton
         // TODO add your handling code here:
         decodeButton.setEnabled(validateDecodeButtonWithBrowse());
     }//GEN-LAST:event_validateDecodeButton
-                                    
+    
+    /**
+     * Checks that all of the required fields have been entered in order for
+     * decryption to be performed.
+     * 
+     * @return True if all the required fields have entries, false otherwise
+     */
     private boolean validateDecodeButtonWithBrowse()
     {
         return (!encodedTextField1.getText().isEmpty()
@@ -379,6 +421,9 @@ public class DecodeFrame extends javax.swing.JFrame {
     }
     
     /**
+     * The main method for the decryption portion of the Holt Visual Cryptography
+     * Tool.
+     * 
      * @param args the command line arguments
      */
     public static void main(String args[]) {

@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package Masters_Proj;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -12,12 +14,11 @@ import java.util.Collections;
 import java.util.Random;
 
 /**
- * This class contains all the methods needed to
- * perform the necessary operations for visual
- * cryptography.
+ * This class contains all the methods needed to perform the necessary operations
+ * for encryption and decryption in terms of visual cryptography.
  * 
  * @author Allison Holt
- * @version 02-21-2016
+ * @version 03-23-2016
  */
 public class ExtendedVCS 
 {
@@ -28,7 +29,6 @@ public class ExtendedVCS
    private int numColumns;
    private BufferedImage secretMsg;
    private BufferedImage[] innocentShares;
-   //private int[2][] shareOrigRGBPixels;
    private int[][] encryptedShareRGB;
    private int[][] secretSharesRGB;
    
@@ -54,7 +54,6 @@ public class ExtendedVCS
       encryptedShareRGB = new int[2][imgWidth * imgHeight];
    }
    
-   //For decryption purposes
    /**
    * This version of the constructor is meant to perform the decryption process.
    * 
@@ -110,7 +109,12 @@ public class ExtendedVCS
    
    /**
    * Method that orchestrates the encryption process and calls the helper
-   * methods necessary.
+   * methods necessary.  It begins by performing error diffusion on the
+   * innocent cover images.  Then, the secret message is split into three
+   * separate images contain the red, green, and blue shares of the secret.
+   * With the three secret shares, VIP synchronization is performed.  The 
+   * encryption completes when the encoded shares are sent through error diffusion
+   * to help blend the pixels together.
    */
    public void encryptImage()
    {
@@ -274,7 +278,8 @@ public class ExtendedVCS
    
    /**
    * Method breaks the secret image is broken up into three separate images
-   * based on the red, green, and blue concentrations.
+   * based on the red, green, and blue concentrations.  This method utilizes
+   * the Pixel class.
    *
    * @param secret The 2D array containing the pixels of the secret images.
    * @param red The red concentration of each pixel in the secret message.
@@ -864,8 +869,6 @@ public class ExtendedVCS
                 if(Math.abs(green1[i] - 127) < 15 && Math.abs(blue1[i] - 127) < 15
                    && Math.abs(green2[i] - 127) < 15 && Math.abs(blue2[i] - 127) < 15)
                 {
-                    //redConcentration = (red1[i] + red2[i]) / 2;
-                    //redConcentration = (red1[i] ^ red2[i]);
                     String e1Red = String.format("%8s", Integer.toBinaryString(red1[i])).replace(" ", "0");
                     String e2Red = String.format("%8s", Integer.toBinaryString(red2[i])).replace(" ", "0");
                     String srRed = "00000000";
@@ -899,8 +902,6 @@ public class ExtendedVCS
                 else if(Math.abs(red1[i] - 127) < 15 && Math.abs(blue1[i] - 127) < 15
                         && Math.abs(red2[i] - 127) < 15 && Math.abs(blue2[i] - 127) < 15)
                 {
-                    //greenConcentration = (green1[i] + green2[i]) / 2;
-                    //greenConcentration = (green1[i] ^ green2[i]);
                     String e1Green = String.format("%8s", Integer.toBinaryString(green1[i])).replace(" ", "0");
                     String e2Green = String.format("%8s", Integer.toBinaryString(green2[i])).replace(" ", "0");
                     String srGreen = "00000000";
@@ -934,8 +935,6 @@ public class ExtendedVCS
                 else if(Math.abs(red1[i] - 127) < 15 && Math.abs(green1[i] - 127) < 15
                         && Math.abs(red2[i] - 127) < 15 && Math.abs(green2[i] - 127) < 15)
                 {
-                    //blueConcentration = (blue1[i] + blue2[i]) / 2;
-                    //blueConcentration = (blue1[i] ^ blue2[i]);
                     String e1Blue = String.format("%8s", Integer.toBinaryString(blue1[i])).replace(" ", "0");
                     String e2Blue = String.format("%8s", Integer.toBinaryString(blue2[i])).replace(" ", "0");
                     String srBlue = "00000000";
@@ -992,6 +991,8 @@ public class ExtendedVCS
    }
    
    /**
+   * This method is currently not used in the tool.
+   * 
    * Method decrypts two encoded images by XOR-ing the binary color values together.
    * The XOR technique decrypts the encoded images as if they were printed on
    * transparencies and physically stacked.
