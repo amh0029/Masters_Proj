@@ -65,6 +65,9 @@ public class ExtendedVCS
       sharesToDecrypt = shareImgs;
       imgWidth = shareImgs[0].getWidth();
       imgHeight = shareImgs[0].getHeight();
+      
+      //added for testing
+      secretMsgPixels = new int[imgWidth * imgHeight];
    }
    
    /**

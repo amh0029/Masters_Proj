@@ -16,20 +16,8 @@ import static org.junit.Assert.*;
  * @author allisonholt
  * @version 03-23-2016
  */
-public class PixelTest {
-    
-    /*
-    public PixelTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    */
+public class PixelTest 
+{
 
     /**
      * Testing the retrieval of the red concentration of a Pixel.

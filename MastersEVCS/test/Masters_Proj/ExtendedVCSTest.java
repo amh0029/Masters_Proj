@@ -5,120 +5,110 @@
  */
 package Masters_Proj;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Test cases for the 
+ * Tests the methods that do not require randomness in the ExtendedVCS class.
+ * 
  * @author allisonholt
+ * @version 03-23-2016
  */
-public class ExtendedVCSTest {
-    
-    public ExtendedVCSTest() {
-    }
-    
+public class ExtendedVCSTest 
+{
+
     /*
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    Some methods were not tested because they are either private helper methods
+    or the methods involve generating a random number.
     */
     
     /**
-     * Test of getImgWidth method, of class ExtendedVCS.
+     * Testing the retrieval of the image width.
+     * 
+     * @throws IOException Occurs when there is an error reading the file
      */
-    @Test
-    public void testGetImgWidth() {
-        System.out.println("getImgWidth");
-        ExtendedVCS instance = null;
-        int expResult = 0;
-        int result = instance.getImgWidth();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test public void testGetImgWidth() throws IOException
+    {
+        BufferedImage secretImage = ImageIO.read(this.getClass().getResource("blackPixel.png"));
+        BufferedImage[] innocents = new BufferedImage[2];
+        innocents[0] = ImageIO.read(this.getClass().getResource("redPixel.png"));
+        innocents[1] = ImageIO.read(this.getClass().getResource("greenPixel.png"));
+        
+        ExtendedVCS evcs = new ExtendedVCS(secretImage, innocents);
+        int expected = 1;
+        int actual = evcs.getImgWidth();
+        assertEquals("The ExtendedVCS class did not return the correct image width"
+                + "The test expected 1 but actually got " + actual, 
+                expected, actual);
     }
 
     /**
-     * Test of getImgHeight method, of class ExtendedVCS.
+     * Testing the retrieval of the image height.
+     * 
+     * @throws IOException Occurs when there is an error reading the file
      */
-    @Test
-    public void testGetImgHeight() {
-        System.out.println("getImgHeight");
-        ExtendedVCS instance = null;
-        int expResult = 0;
-        int result = instance.getImgHeight();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test public void testGetImgHeight() throws IOException
+    {
+        BufferedImage secretImage = ImageIO.read(this.getClass().getResource("blackPixel.png"));
+        BufferedImage[] innocents = new BufferedImage[2];
+        innocents[0] = ImageIO.read(this.getClass().getResource("redPixel.png"));
+        innocents[1] = ImageIO.read(this.getClass().getResource("greenPixel.png"));
+        
+        ExtendedVCS evcs = new ExtendedVCS(secretImage, innocents);
+        int expected = 1;
+        int actual = evcs.getImgHeight();
+        assertEquals("The ExtendedVCS class did not return the correct image width"
+                + "The test expected 1 but actually got " + actual, 
+                expected, actual);
     }
 
     /**
-     * Test of getRGBPixelsForShares method, of class ExtendedVCS.
+     * Testing the retrieval of the encoded share pixels.  By default they should
+     * be set to zero.
+     * 
+     * @throws IOException Occurs when there is an error reading the file
      */
-    @Test
-    public void testGetRGBPixelsForShares() {
-        System.out.println("getRGBPixelsForShares");
-        ExtendedVCS instance = null;
-        int[][] expResult = null;
-        int[][] result = instance.getRGBPixelsForShares();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test public void testGetRGBPixelsForShares() throws IOException
+    {
+        BufferedImage secretImage = ImageIO.read(this.getClass().getResource("blackPixel.png"));
+        BufferedImage[] innocents = new BufferedImage[2];
+        innocents[0] = ImageIO.read(this.getClass().getResource("redPixel.png"));
+        innocents[1] = ImageIO.read(this.getClass().getResource("greenPixel.png"));
+        
+        ExtendedVCS evcs = new ExtendedVCS(secretImage, innocents);
+        int[][] expected = new int[2][1];
+        int[][] actual = evcs.getRGBPixelsForShares();
+        boolean passed = (expected[0][0] == actual[0][0]) 
+                && (expected[1][0] == actual[1][0]);
+        assertEquals("The ExtendedVCS class did not return the correct integer"
+                + "array for the encoded shares", 
+                true, passed);
     }
 
     /**
-     * Test of getDecryptImgPixels method, of class ExtendedVCS.
+     * Testing the retrieval of the decoded pixels.
+     * 
+     * @throws IOException Occurs when there is an error reading the file
      */
-    @Test
-    public void testGetDecryptImgPixels() {
-        System.out.println("getDecryptImgPixels");
-        ExtendedVCS instance = null;
-        int[] expResult = null;
-        int[] result = instance.getDecryptImgPixels();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of encryptImage method, of class ExtendedVCS.
-     */
-    @Test
-    public void testEncryptImage() {
-        System.out.println("encryptImage");
-        ExtendedVCS instance = null;
-        instance.encryptImage();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of decryptImage method, of class ExtendedVCS.
-     */
-    @Test
-    public void testDecryptImage() {
-        System.out.println("decryptImage");
-        ExtendedVCS instance = null;
-        instance.decryptImage();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of decryptImageTransparencyMethod method, of class ExtendedVCS.
-     */
-    @Test
-    public void testDecryptImageTransparencyMethod() {
-        System.out.println("decryptImageTransparencyMethod");
-        ExtendedVCS instance = null;
-        instance.decryptImageTransparencyMethod();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test public void testGetDecryptImgPixels() throws IOException
+    {
+        BufferedImage[] encoded = new BufferedImage[2];
+        encoded[0] = ImageIO.read(this.getClass().getResource("redPixel.png"));
+        encoded[1] = ImageIO.read(this.getClass().getResource("greenPixel.png"));
+        
+        ExtendedVCS evcs = new ExtendedVCS(encoded);
+        int[] expected = new int[1];
+        int[] actual = evcs.getDecryptImgPixels();
+        boolean passed = (expected[0] == actual[0]);
+        assertEquals("The ExtendedVCS class did not return the correct integer"
+                + "array for the decoded image pixels", 
+                true, passed);
     }
     
 }
