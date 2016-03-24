@@ -1,6 +1,5 @@
 @startuml
 
-
 class Masters_Proj.DecodeFrame
 class Masters_Proj.DirectoryCustomFilter
 class Masters_Proj.EncodeFrame
@@ -8,4 +7,5 @@ class Masters_Proj.ExtendedVCS
 class Masters_Proj.ImageCustomFilter
 class Masters_Proj.MainFrame
 class Masters_Proj.Pixel
+
 @enduml

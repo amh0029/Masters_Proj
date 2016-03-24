@@ -1,0 +1,32 @@
+@startuml
+
+class Masters_Proj.DecodeFrame
+class Masters_Proj.DirectoryCustomFilter
+class Masters_Proj.EncodeFrame
+class Masters_Proj.ExtendedVCS
+class Masters_Proj.ImageCustomFilter
+class Masters_Proj.MainFrame
+class Masters_Proj.Pixel
+
+'Showing the dependencies
+
+'MainFrame uses EncodeFrame and DecodeFrame (General Dependency)
+Masters_Proj.MainFrame ..> Masters_Proj.EncodeFrame
+Masters_Proj.MainFrame ..> Masters_Proj.DecodeFrame
+
+'EncodeFrame uses DirectoryCustomFilter, ImageCustomFilter, and ExtendedVCS
+'(General Dependency)
+Masters_Proj.EncodeFrame ..> Masters_Proj.DirectoryCustomFilter
+Masters_Proj.EncodeFrame ..> Masters_Proj.ImageCustomFilter
+Masters_Proj.EncodeFrame ..> Masters_Proj.ExtendedVCS
+
+'DecodeFrame uses DirectoryCustomFilter, ImageCustomFilter, and ExtendedVCS
+'(General Dependency)
+Masters_Proj.DecodeFrame ..> Masters_Proj.DirectoryCustomFilter
+Masters_Proj.DecodeFrame ..> Masters_Proj.ImageCustomFilter
+Masters_Proj.DecodeFrame ..> Masters_Proj.ExtendedVCS
+
+'ExtendedVCS uses Pixel
+Masters_Proj.ExtendedVCS ..> Masters_Proj.Pixel
+
+@enduml
