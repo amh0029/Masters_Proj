@@ -11,8 +11,10 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
+ * This class tests the methods in the Pixel class.
+ * 
  * @author allisonholt
+ * @version 03-23-2016
  */
 public class PixelTest {
     
