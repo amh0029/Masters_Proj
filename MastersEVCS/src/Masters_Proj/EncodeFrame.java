@@ -485,7 +485,7 @@ public class EncodeFrame extends javax.swing.JFrame {
                     
                 new MainFrame().setVisible(true);
                 this.setVisible(false);
-                JOptionPane.showMessageDialog(null, "Your encrypted shares(" + firstFile
+                JOptionPane.showMessageDialog(null, "Your encrypted shares (" + firstFile
                     + " and " + secondFile + ")\nhave been created and stored in "
                     + directory + ".",
                     "SUCCESS", JOptionPane.PLAIN_MESSAGE);

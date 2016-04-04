@@ -8,10 +8,13 @@ package Masters_Proj;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 /**
  * This class contains all the methods needed to perform the necessary operations
@@ -313,6 +316,29 @@ public class ExtendedVCS
          green[i] = greenColor.getRGB();
          blue[i] = blueColor.getRGB();
       }
+      /*
+      BufferedImage tempRed = new BufferedImage(getImgWidth(), getImgHeight(), BufferedImage.TYPE_INT_RGB);
+      tempRed.setRGB(0, 0, getImgWidth(), getImgHeight(), red, 0, getImgWidth());
+      File outputRed = new File("/Users/allisonholt/Google Drive/Spring 2016/Master's Project Resources/imagesForPPT/redShare.png");
+      
+      BufferedImage tempGreen = new BufferedImage(getImgWidth(), getImgHeight(), BufferedImage.TYPE_INT_RGB);
+      tempGreen.setRGB(0, 0, getImgWidth(), getImgHeight(), green, 0, getImgWidth());
+      File outputGreen = new File("/Users/allisonholt/Google Drive/Spring 2016/Master's Project Resources/imagesForPPT/greenShare.png");
+      
+      BufferedImage tempBlue = new BufferedImage(getImgWidth(), getImgHeight(), BufferedImage.TYPE_INT_RGB);
+      tempBlue.setRGB(0, 0, getImgWidth(), getImgHeight(), blue, 0, getImgWidth());
+      File outputBlue = new File("/Users/allisonholt/Google Drive/Spring 2016/Master's Project Resources/imagesForPPT/blueShare.png");
+      try
+      {
+        ImageIO.write(tempRed, "png", outputRed);
+        ImageIO.write(tempGreen, "png", outputGreen);
+        ImageIO.write(tempBlue, "png", outputBlue);
+      }
+      catch(IOException e)
+      {
+          
+      }
+      */
    }
    
    /**
